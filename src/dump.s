@@ -135,8 +135,8 @@ DumpPartitionTables:
 	mov ebp, Messages.get_block_size_error
 	mov ebx, Messages.get_block_size_error_end - Messages.get_block_size_error
 	jnc FilenameErrorExit
-	mov rax, [zGenericDataBuffer]
-	cmp rax, MAXIMUM_BLOCK_SIZE
+	mov eax, [zGenericDataBuffer]
+	cmp eax, MAXIMUM_BLOCK_SIZE
 	mov ebp, Messages.bad_block_size
 	mov ebx, Messages.bad_block_size_end - Messages.bad_block_size
 	ja FilenameErrorExit

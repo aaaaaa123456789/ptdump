@@ -8,6 +8,7 @@ ExecutionModeFunctions:
 	dd 0 ; ...
 	dd 0 ; ...
 	dd 0 ; ...
+	dd 0 ; ...
 	dd VersionMode
 	dd HelpMode
 	assert ($ - ExecutionModeFunctions) / 4 == EXECUTION_MODE_OPTIONS
@@ -24,6 +25,7 @@ OptionTables:
 	dd ProgramInformation.restore
 	dd ProgramInformation.copy
 	dd ProgramInformation.merge
+	dd ProgramInformation.extract
 	dd ProgramInformation.version
 	dd ProgramInformation.help
 	assert ($ - .long) / 4 == EXECUTION_MODE_OPTIONS
@@ -32,10 +34,10 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "ml0xprcevhdbs"
+	db "ml0zprcexvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
-	db 3, 13, 15, 11, 6, 7, 4, 5, 7, 4, 9, 15, 15
+	db 3, 13, 15, 11, 6, 7, 4, 5, 7, 7, 4, 9, 15, 15
 	assert ($ - .lengths) == TOTAL_OPTION_FLAGS
 
 	global _start:function
@@ -109,6 +111,8 @@ Main:
 	jnz .input
 	lea r14, [rax + 2]
 	mov bl, [rax + 1]
+	test bl, bl
+	jz .not_escaped
 	cmp bl, "-"
 	jz .long_option
 	xor edx, edx

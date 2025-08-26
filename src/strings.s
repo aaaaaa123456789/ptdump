@@ -72,7 +72,7 @@ ProgramInformation:
 	db `list-contents-0:\n`
 	db `\tLike the previous mode, but filenames are separated by null bytes\n`
 	db `\tinstead of newlines (as expected by xargs -0 and similar tools).\n`
-	db "-x, --"
+	db "-z, --"
 .list_blocks:
 	db `list-blocks:\n`
 	db `\tList the contents of a data file (filenames and blocks for each file).\n`
@@ -106,7 +106,15 @@ ProgramInformation:
 .merge:
 	db `merge:\n`
 	db `\tCompacts and merges multiple data files into a single one. (For this\n`
-	db `\tmode, the filename arguments are the input data files.)`
+	db `\tmode, the filename arguments are the input data files.) Use "-" as a\n`
+	db `\tfilename argument to read from standard input.\n`
+	db "-x, --"
+.extract:
+	db `extract:\n`
+	db `\tExtracts the contents for one or more disks (or disk images) from a\n`
+	db `\tdata file into a new one. The first filename argument for this mode is\n`
+	db `\tthe data file to extract from (use "-" to read from standard input);\n`
+	db `\tother filename arguments represent the filenames to extract.\n`
 	db "-v, --"
 .version:
 	db `version: show version information and exit.\n`

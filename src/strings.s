@@ -102,6 +102,11 @@ ProgramInformation:
 	db `\targuments for this option must be specified in pairs: for each pair,\n`
 	db `\tthe first argument indicates the filename stored in the data file, and\n`
 	db `\tthe second argument indicates the destination filename.\n`
+	db "-e, --"
+.merge:
+	db `merge:\n`
+	db `\tCompacts and merges multiple data files into a single one. (For this\n`
+	db `\tmode, the filename arguments are the input data files.)`
 	db "-v, --"
 .version:
 	db `version: show version information and exit.\n`

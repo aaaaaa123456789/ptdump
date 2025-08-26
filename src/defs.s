@@ -27,11 +27,11 @@ struc inputdev
 	.extra_sector_table:              resb 8 ; table of (number, pointer); (0, pointer) continues, (0, 0) ends
 endstruc
 
-%assign EXECUTION_MODE_OPTIONS         9
+%assign EXECUTION_MODE_OPTIONS        10
 %assign HEADER_SIZE_DEFAULT     0x100000 ;   1 MB
 %assign HEADER_SIZE_LIMIT      0x1000000 ;  16 MB
 %assign MAXIMUM_BLOCK_SIZE       0x40000 ; 256 KB - cannot be higher without changing the file format
-%assign TOTAL_OPTION_FLAGS            12
+%assign TOTAL_OPTION_FLAGS            13
 
 ; Linux x64 syscall IDs (in: (rdi, rsi, rdx, r10, r8, r9); out: rax)
 %assign read         0 ; (fd, buf, count)

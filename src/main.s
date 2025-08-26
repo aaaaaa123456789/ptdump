@@ -7,6 +7,7 @@ ExecutionModeFunctions:
 	dd 0 ; ...
 	dd 0 ; ...
 	dd 0 ; ...
+	dd 0 ; ...
 	dd VersionMode
 	dd HelpMode
 	assert ($ - ExecutionModeFunctions) / 4 == EXECUTION_MODE_OPTIONS
@@ -22,6 +23,7 @@ OptionTables:
 	dd ProgramInformation.sfdisk
 	dd ProgramInformation.restore
 	dd ProgramInformation.copy
+	dd ProgramInformation.merge
 	dd ProgramInformation.version
 	dd ProgramInformation.help
 	assert ($ - .long) / 4 == EXECUTION_MODE_OPTIONS
@@ -30,10 +32,10 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "ml0xprcvhdbs"
+	db "ml0xprcevhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
-	db 3, 13, 15, 11, 6, 7, 4, 7, 4, 9, 15, 15
+	db 3, 13, 15, 11, 6, 7, 4, 5, 7, 4, 9, 15, 15
 	assert ($ - .lengths) == TOTAL_OPTION_FLAGS
 
 	global _start:function

@@ -55,6 +55,7 @@ endstruc
 ; errors and signals
 %assign EINTR    4
 %assign EBADF    9
+%assign EAGAIN  11
 %assign ENODEV  19
 %assign EINVAL  22
 %assign SIGABRT  6
@@ -72,8 +73,10 @@ endstruc
 %assign PROT_WRITE          2
 %assign S_IFBLK        0x6000
 %assign S_IFCHR        0x2000
+%assign S_IFIFO        0x1000
 %assign S_IFMT         0xf000
 %assign S_IFREG        0x8000
+%assign S_IFSOCK       0xc000
 
 ; ioctl command values
 %assign BLKGETSIZE64 0x80081272

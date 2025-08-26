@@ -12,6 +12,7 @@ zExecutionMode:
 zPartitionTableSizesMatch:
 zPartitionTableType:       resb 1
 zNoMoreOptions:
+zListingDelimiter:
 zRemainingBufferBlocks:    resb 1
 zHeaderPartitionTableSize: resb 2
                            resb 4 ; padding

@@ -69,6 +69,7 @@ There are two types of entries: sequence entries and RLE entries.
 The first word of each entry determines the type of entry: if its least significant byte is zero, it is an RLE entry;
 otherwise, it is a sequence entry.
 A word with a value of zero (at a location where an entry would start) terminates the list.
+The list must not be empty.
 
 ### RLE block entries
 

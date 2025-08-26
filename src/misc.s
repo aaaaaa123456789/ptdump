@@ -40,6 +40,7 @@ DoAllocationCall:
 	syscall
 	cmp rax, -0x1000
 	jc WriteData.done ; any return will do
+AllocationErrorExit:
 	mov ebp, Messages.allocation_error
 	mov ebx, Messages.allocation_error_end - Messages.allocation_error
 	call WriteError
@@ -66,6 +67,15 @@ OutputTooLargeErrorExit:
 	mov ebp, Messages.output_too_large_error
 	mov ebx, Messages.output_too_large_error_end - Messages.output_too_large_error
 	jmp ErrorExit
+
+RejectSizeArguments:
+	cmp dword[zSizeSpecCount], 2
+	mov ebp, Messages.sizes_not_valid_error
+	mov ebx, Messages.sizes_not_valid_error_end - Messages.sizes_not_valid_error
+	jnc BadInvocationExit
+	cmp dword[zDefaultFileBlockSize], 0
+	jnz BadInvocationExit
+	ret
 
 Abort:
 	mov eax, getpid

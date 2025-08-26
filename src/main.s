@@ -1,8 +1,8 @@
 	align 4, db 0
 ExecutionModeFunctions:
 	dd DumpMappedMode
-	dd 0 ; ...
-	dd 0 ; ...
+	dd ListContentsMode
+	dd ListContentsZeroMode
 	dd 0 ; ...
 	dd 0 ; ...
 	dd 0 ; ...
@@ -59,9 +59,10 @@ _start:
 	syscall
 	cmp rax, -0x1000
 	jnc Abort
-	mov eax, [zStatBuffer + st_mode]
-	and eax, S_IFMT
-	cmp eax, S_IFCHR
+	assert (S_IFMT & ~0xff00) == 0
+	mov al, [zStatBuffer + st_mode + 1]
+	and al, S_IFMT >> 8
+	cmp al, S_IFCHR >> 8
 	jnz Abort
 	; device numbers are 32 bits; bits 8-19 are the major number and 0-7, 20-31 are the minor (legacy is fun)
 	; the null device is a character device with major = 1, minor = 3

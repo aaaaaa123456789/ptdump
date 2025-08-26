@@ -117,11 +117,12 @@ DumpPartitionTables:
 	mov ebp, Messages.stat_error
 	mov ebx, Messages.stat_error_end - Messages.stat_error
 	jnc FilenameErrorExit
-	mov eax, [zStatBuffer + st_mode]
-	and eax, S_IFMT
-	cmp eax, S_IFREG
+	assert (S_IFMT & ~0xff00) == 0
+	mov al, [zStatBuffer + st_mode + 1]
+	and al, S_IFMT >> 8
+	cmp al, S_IFREG >> 8
 	jz .regular_file_input
-	cmp eax, S_IFBLK
+	cmp al, S_IFBLK >> 8
 	mov ebp, Messages.bad_input_type_error
 	mov ebx, Messages.bad_input_type_error_end - Messages.bad_input_type_error
 	jnz FilenameErrorExit
@@ -796,12 +797,13 @@ DumpPartitionTables:
 	mov [rax + 4 * r15], ecx
 	lea rbx, [4 * r15 + 4]
 	mov rbp, rax
+	; fallthrough
 
 WriteOutputExit:
 	; in: rbp = pointer to output, rbx = size, zDataFilename = output filename, or null for stdout
 	mov r15, [zDataFilename]
 	test r15, r15
-	jz .standard_output
+	jz WriteStandardOutputExit.output
 .try_open:
 	mov rdi, r15
 	mov esi, 0o666
@@ -811,12 +813,15 @@ WriteOutputExit:
 	jz .try_open
 	mov [zCurrentFD], eax
 	cmp rax, -0x1000
-	jc .opened
+	jc WriteStandardOutputExit.opened
 	mov ebp, Messages.open_error
 	mov ebx, Messages.open_error_end - Messages.open_error
 	jmp FilenameErrorExit
 
-.standard_output:
+WriteStandardOutputExit:
+	; in: rbp = pointer to output, rbx = size
+	xor r15d, r15d
+.output:
 	mov edi, 1
 	mov [zCurrentFD], edi
 	mov esi, F_GETFL

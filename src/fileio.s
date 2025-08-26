@@ -1,3 +1,98 @@
+MapInputFile:
+	; in: r15: filename; out: rbp: mapping, rbx: file size; modifies zStatBuffer, r12, r13
+	mov rdi, r15
+	assert O_RDONLY == 0
+	xor esi, esi
+	mov eax, open
+	syscall
+	cmp rax, -EINTR
+	jz MapInputFile
+	cmp rax, -0x1000
+.open_failed:
+	mov ebp, Messages.open_error
+	mov ebx, Messages.open_error_end - Messages.open_error
+	jnc FilenameErrorExit
+	mov ebp, eax
+	mov edi, eax
+	mov esi, zStatBuffer
+	mov eax, fstat
+	syscall
+	cmp rax, -0x1000
+	jnc .open_failed
+	mov rbx, [zStatBuffer + st_size]
+	test rbx, rbx
+	jz ReadInputFile
+	assert (S_IFMT & ~0xff00) == 0
+	mov al, [zStatBuffer + st_mode + 1]
+	and al, S_IFMT >> 8
+	cmp al, S_IFIFO >> 8
+	jz ReadInputFile
+	cmp al, S_IFSOCK >> 8
+	jz ReadInputFile
+	xor edi, edi
+	mov rsi, rbx
+	mov edx, PROT_READ
+	mov r10d, MAP_PRIVATE
+	mov r8d, ebp
+	xor r9d, r9d
+	mov eax, mmap
+	syscall
+	cmp rax, -EAGAIN
+	jz ReadInputFile
+	cmp rax, -ENODEV
+	jz ReadInputFile
+	cmp rax, -0x1000
+	jnc .open_failed
+	mov edi, ebp
+	mov rbp, rax
+	mov eax, close
+	syscall
+	ret
+
+ReadInputFile:
+	; in: rbp: FD, rbx: known minimum size; out: rbp: buffer, rbx: true size; modifies r12, r13
+	lea rsi, [rbx + 0x1fff]
+	and rsi, -0x1000
+	mov r13, rsi
+	call AllocateAligned
+	xor ebx, ebx
+.remap_loop:
+	mov r12, rax
+.loop:
+	mov rdx, r13
+	sub rdx, rbx
+	lea rsi, [r12 + rbx]
+	mov edi, ebp
+	assert read == 0
+	xor eax, eax
+	syscall
+	cmp rax, -EINTR
+	jz .loop
+	cmp rax, -0x1000
+	jnc ReadData.fail
+	test eax, eax
+	jz .done
+	add rbx, rax
+	lea rdx, [rbx + 0x1fff]
+	and rdx, -0x1000
+	cmp rdx, r13
+	jbe .loop
+	mov rsi, r13
+	mov rdi, r12
+	mov r10d, MREMAP_MAYMOVE
+	mov eax, mremap
+	syscall
+	cmp rax, -0x1000
+	jc .remap_loop
+	jmp AllocationErrorExit
+
+.done:
+	mov edi, ebp
+	mov rbp, r12
+	mov eax, close
+	syscall
+	ret
+
 ReadDataAtOffset:
 	; in: r10: offset; other inputs as for ReadData
 	push r10

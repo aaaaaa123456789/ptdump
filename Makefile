@@ -1,7 +1,8 @@
 .PHONY: all debug clean
 .SUFFIXES:
 
-export BUILD_DATE = $(shell date +%F -d @$$(git log -n 1 --format='format:%ct'))
+BUILD_DATE ?= $(shell date +%F -d @$$(git log -n 1 --format='format:%ct'))
+export BUILD_DATE
 
 all: ptdump.s ldscript.txt $(wildcard src/*)
 	nasm -felf64 $< -o ptdump.o

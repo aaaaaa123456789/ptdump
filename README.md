@@ -8,3 +8,7 @@ Requires a reasonably recent version of NASM to build (2.16 should work), as wel
 Use `make` to build the binary.
 Once built, `ptdump -h` will show usage instructions.
 (`make debug` and `make clean` will also behave as expected.)
+
+The version number will be set to the date of the last commit at the time of building.
+To set it to some other date, set the `BUILD_DATE` environment variable to any ISO 8601 date.
+(For example, pass `BUILD_DATE=1970-01-01` as an argument to `make`.)

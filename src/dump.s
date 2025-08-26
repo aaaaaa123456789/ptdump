@@ -797,6 +797,8 @@ DumpPartitionTables:
 	lea rbx, [4 * r15 + 4]
 	mov rbp, rax
 
+WriteOutputExit:
+	; in: rbp = pointer to output, rbx = size, zDataFilename = output filename, or null for stdout
 	mov r15, [zDataFilename]
 	test r15, r15
 	jz .standard_output

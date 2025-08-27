@@ -126,3 +126,45 @@ OpenValidateInputDataFile:
 	dec r10d
 	jnz .file_loop
 	ret
+
+LoadFilenameTable:
+	; in: OpenValidateDataFile's outputs; out: r13: allocated filename table (key, pointer for each filename)
+	mov esi, r14d
+	shl rsi, 4
+	call Allocate
+	mov r13, rax
+	mov edx, r14d
+	lea r11, [rbp + 4 * rbx]
+	mov r10, rax
+.loop:
+	mov rsi, [r11]
+	mov [r10 + 8], rsi
+	movzx ecx, word[r11 + 4]
+	call GetFilenameSortingKey
+	mov [r10], rdi
+	add r11, 12
+	add r10, 16
+	dec edx
+	jnz .loop
+	xchg ebx, r14d
+	xchg rbp, r13
+	call SortPairs
+	xchg rbp, r13
+	xchg ebx, r14d
+	ret
+
+GetFilenameSortingKey:
+	; in: rsi: filename, ecx: length (assumed nonzero); out: rdi: key (bits 0-15: length, 32-63: CRC)
+	mov eax, ecx
+	shl eax, 8
+	stc
+	sbb edi, edi
+.loop:
+	lodsb
+	crc32 edi, al
+	dec ecx
+	jnz .loop
+	shl rdi, 32
+	shr eax, 8
+	or rdi, rax
+	ret

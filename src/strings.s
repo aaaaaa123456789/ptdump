@@ -5,9 +5,11 @@ Messages:
 .bad_device_size:                 withend db "error: invalid size obtained for device: "
 .bad_input_type_error:            withend db "error: file is not a regular file or block device: "
 .data_file_not_valid:             withend db "error: data file is not valid: "
+.duplicate_input_filename:        withend db "error: duplicate input filename: "
 .empty_argument_error:            withend db `error: invalid empty argument\n`
 .get_block_size_error:            withend db "error: failed to get block size for device: "
 .get_device_size_error:           withend db "error: failed to get size for file or device: "
+.input_filename_too_long_error:   withend db "error: input filename too long: "
 .inputs_not_paired_error:         withend db `error: input filenames must be specified in pairs for this mode\n`
 .inputs_not_valid_error:          withend db `error: input filenames must not be specified for this mode\n`
 .invalid_block_size_error:        withend db "error: invalid block size: "

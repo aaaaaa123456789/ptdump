@@ -541,9 +541,6 @@ DumpPartitionTables:
 .skip_sorting_extra_sectors:
 	mov rbp, [r12 + inputdev.filename]
 	call StringLength
-	mov edx, 0xffff
-	cmp rbx, rdx
-	cmova ebx, edx
 	mov [r12 + inputdev.filename_length], bx
 	add ebx, 3
 	and ebx, -4

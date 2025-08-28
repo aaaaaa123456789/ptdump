@@ -78,6 +78,7 @@ ReadInputFile:
 	cmp rdx, r13
 	jbe .loop
 	mov rsi, r13
+	mov r13, rdx
 	mov rdi, r12
 	mov r10d, MREMAP_MAYMOVE
 	mov eax, mremap

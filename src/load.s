@@ -97,9 +97,14 @@ OpenValidateInputDataFile:
 	cmp rdx, rdi
 	jbe .next_block
 .invalid:
-	mov ebp, FilenameStrings.stdin
+	mov ebp, zStringBuffer
 	test r15, r15
 	cmovz r15, rbp
+	jnz .no_copy_stdin_filename
+	mov esi, FilenameStrings.stdin
+	mov edi, zStringBuffer
+	copybytes FilenameStrings.stdin_end - FilenameStrings.stdin
+.no_copy_stdin_filename:
 	mov ebp, Messages.data_file_not_valid
 	mov ebx, Messages.data_file_not_valid_end - Messages.data_file_not_valid
 	jmp FilenameErrorExit

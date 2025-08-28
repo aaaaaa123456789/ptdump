@@ -38,7 +38,7 @@ Messages:
 
 FilenameStrings:
 .dev_null: db "/dev/null", 0
-.stdin: db "<standard input>", 0
+.stdin: withend db "<standard input>", 0
 
 TableHeaders: withend db `           block#    count  bsize      offset filename\n`
 .one_file:    withend db `           block#    count  bsize      offset\n`

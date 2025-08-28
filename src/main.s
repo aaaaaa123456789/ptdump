@@ -3,7 +3,7 @@ ExecutionModeFunctions:
 	dd DumpMappedMode
 	dd ListContentsMode
 	dd ListContentsZeroMode
-	dd 0 ; ...
+	dd ListBlocksMode
 	dd 0 ; ...
 	dd 0 ; ...
 	dd 0 ; ...
@@ -34,7 +34,7 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "ml0zprcexvhdbs"
+	db "ml0tprcexvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
 	db 3, 13, 15, 11, 6, 7, 4, 5, 7, 7, 4, 9, 15, 15
@@ -293,7 +293,7 @@ Main:
 	mov [zSizeSpecCount], eax
 	shr rax, 32
 	jnz Abort
-	test ebx, ebx
+	test r13d, r13d
 	jz .go
 	mov r14, rsp
 	and rsp, -16

@@ -819,23 +819,7 @@ WriteStandardOutputExit:
 	; in: rbp = pointer to output, rbx = size
 	xor r15d, r15d
 .output:
-	mov edi, 1
-	mov [zCurrentFD], edi
-	mov esi, F_GETFL
-	mov eax, fcntl
-	syscall
-	cmp rax, -EBADF
-	jz .standard_output_not_open
-	cmp rax, -0x1000
-	jnc .output_error
-	and al, O_ACCMODE
-	assert O_RDONLY == 0
-	jnz .opened
-.standard_output_not_open:
-	mov ebp, Messages.no_standard_output
-	mov ebx, Messages.no_standard_output_end - Messages.no_standard_output
-	jmp ErrorExit
-
+	call CheckOpenStandardOutput
 .opened:
 	call WriteData
 	test rax, rax

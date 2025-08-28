@@ -128,30 +128,81 @@ OpenValidateInputDataFile:
 	ret
 
 LoadFilenameTable:
-	; in: OpenValidateDataFile's outputs; out: r13: allocated filename table (key, pointer for each filename)
+	; in: OpenValidateDataFile's outputs; out: r13: allocated filename table (key, offset, index for each filename)
 	mov esi, r14d
 	shl rsi, 4
 	call Allocate
 	mov r13, rax
-	mov edx, r14d
+	xor edx, edx
 	lea r11, [rbp + 4 * rbx]
 	mov r10, rax
 .loop:
-	mov rsi, [r11]
-	mov [r10 + 8], rsi
+	mov esi, [r11]
+	mov [r10 + 8], esi
+	mov [r10 + 12], edx
+	lea rsi, [rbp + 4 * rsi]
 	movzx ecx, word[r11 + 4]
 	call GetFilenameSortingKey
 	mov [r10], rdi
 	add r11, 12
 	add r10, 16
-	dec edx
-	jnz .loop
+	inc edx
+	cmp edx, r14d
+	jc .loop
 	xchg ebx, r14d
 	xchg rbp, r13
 	call SortPairs
+	mov edx, ebx
+	dec edx
+	jz .done
+	shl rdx, 4
+.check:
+	mov rcx, [rbp + rdx]
+	cmp rcx, [rbp + rdx - 16]
+	jnz .next
+	movzx ecx, cx
+	mov esi, [rbp + rdx + 8]
+	mov edi, [rbp + rdx - 8]
+	lea rsi, [rbp + 4 * rsi]
+	lea rdi, [rbp + 4 * rdi]
+	repz cmpsb
+	jz .duplicate
+.next:
+	sub rdx, 16
+	jnz .check
+.done:
 	xchg rbp, r13
 	xchg ebx, r14d
 	ret
+
+.duplicate:
+	lea r12, [rbp + rdx + 8]
+	movzx r13d, word[rbp + rdx]
+	mov ebp, FilenameStrings.stdin
+	test r15, r15
+	cmovnz rbp, r15
+	mov r15, rbp
+	call StringLength
+	lea rsi, [r13 + rbx + 1 + \
+	          (Messages.data_file_open_paren_end - Messages.data_file_open_paren) + \
+	          (Messages.duplicate_filename_close_paren_end - Messages.duplicate_filename_close_paren)]
+	call Allocate
+	mov rdi, rax
+	mov esi, Messages.data_file_open_paren
+	copybytes Messages.data_file_open_paren_end - Messages.data_file_open_paren
+	mov rsi, r15
+	mov rcx, rbx
+	rep movsb
+	mov esi, Messages.duplicate_filename_close_paren
+	copybytes Messages.duplicate_filename_close_paren_end - Messages.duplicate_filename_close_paren
+	mov rsi, r12
+	mov rcx, r13
+	rep movsb
+	mov byte[rdi], `\n`
+	sub rdi, rax
+	lea rbx, [rdi + 1]
+	mov rbp, rax
+	jmp ErrorExit
 
 GetFilenameSortingKey:
 	; in: rsi: filename, ecx: length (assumed nonzero); out: rdi: key (bits 0-15: length, 32-63: CRC)
@@ -167,4 +218,68 @@ GetFilenameSortingKey:
 	shl rdi, 32
 	shr eax, 8
 	or rdi, rax
+	ret
+
+FindFilenameInTable:
+	; in: r13: filename table, r14d: filename table size, rsi: searched filename; out: eax: index
+	mov r11, rsi
+	xchg rbp, rsi
+	mov rcx, rbx
+	call StringLength
+	xchg rcx, rbx
+	mov rbp, rsi
+	cmp rcx, 0x10000
+	jnc .fail
+	mov rsi, r11
+	call GetFilenameSortingKey
+	mov r8, -1
+	mov r9d, r14d
+.loop:
+	lea rax, [r8 + r9]
+	and rax, -2
+	cmp rdi, [r13 + 8 * rax]
+	jz .found
+	adc rax, 0 ; preserve carry
+	rcr rax, 1
+	cmovc r9, rax
+	cmovnc r8, rax
+	lea rax, [r8 + 1]
+	cmp rax, r9
+	jc .loop
+.fail:
+	mov r15, r11
+	mov ebp, Messages.filename_not_found_error
+	mov ebx, Messages.filename_not_found_error_end - Messages.filename_not_found_error
+	jmp FilenameErrorExit
+
+.found:
+	mov r8, rax
+	mov r9, rax
+	lea rcx, [r14 + r14]
+.forwards_loop:
+	add r9, 2
+	cmp r9, rcx
+	jnc .backwards_loop
+	cmp rdi, [r13 + 8 * r9]
+	jz .forwards_loop
+.backwards_loop:
+	sub r8, 2
+	jc .got_endpoints
+	cmp rdi, [r13 + 8 * r8]
+	jz .backwards_loop
+.got_endpoints:
+	sub r9, r8
+	shr r9, 1
+	movzx edx, di
+.check:
+	dec r9
+	jz .fail
+	add r8, 2
+	mov esi, [r13 + 8 * r8 + 8]
+	lea rsi, [rbp + 4 * rsi]
+	mov rdi, r11
+	mov ecx, edx
+	repz cmpsb
+	jnz .check
+	mov eax, [r13 + 8 * r8 + 12]
 	ret

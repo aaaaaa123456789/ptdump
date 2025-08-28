@@ -153,6 +153,31 @@ ReadData:
 	cmovz ebx, eax
 	jmp FilenameErrorExit
 
+CheckOpenStandardOutput:
+	mov edi, 1
+	mov [zCurrentFD], edi
+	mov esi, F_GETFL
+	mov eax, fcntl
+	syscall
+	cmp rax, -EBADF
+	jz .not_open
+	cmp rax, -0x1000
+	jnc .error
+	and al, O_ACCMODE
+	assert O_RDONLY == 0
+	jz .not_open
+	ret
+
+.not_open:
+	mov ebp, Messages.no_standard_output
+	mov ebx, Messages.no_standard_output_end - Messages.no_standard_output
+	jmp ErrorExit
+
+.error:
+	mov ebp, Messages.output_error
+	mov ebx, Messages.output_error_end - Messages.output_error
+	jmp ErrorExit
+
 WriteError:
 	mov dword[zCurrentFD], 2
 WriteData:

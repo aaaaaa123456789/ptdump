@@ -4,9 +4,12 @@ Messages:
 .bad_block_size:                  withend db "error: bad block size for device: "
 .bad_device_size:                 withend db "error: invalid size obtained for device: "
 .bad_input_type_error:            withend db "error: file is not a regular file or block device: "
+.data_file_open_paren:            withend db "error: data file ("
 .data_file_not_valid:             withend db "error: data file is not valid: "
+.duplicate_filename_close_paren:  withend db ") contains a duplicate filename: "
 .duplicate_input_filename:        withend db "error: duplicate input filename: "
 .empty_argument_error:            withend db `error: invalid empty argument\n`
+.filename_not_found_error:        withend db "error: filename not found in data file: "
 .get_block_size_error:            withend db "error: failed to get block size for device: "
 .get_device_size_error:           withend db "error: failed to get size for file or device: "
 .input_filename_too_long_error:   withend db "error: input filename too long: "
@@ -36,6 +39,9 @@ Messages:
 FilenameStrings:
 .dev_null: db "/dev/null", 0
 .stdin: db "<standard input>", 0
+
+TableHeaders: withend db `           block#    count  bsize      offset filename\n`
+.one_file:    withend db `           block#    count  bsize      offset\n`
 
 ProgramInformation:
 	; version information first; will be printed on its own by -v/--version
@@ -74,7 +80,7 @@ ProgramInformation:
 	db `list-contents-0:\n`
 	db `\tLike the previous mode, but filenames are separated by null bytes\n`
 	db `\tinstead of newlines (as expected by xargs -0 and similar tools).\n`
-	db "-z, --"
+	db "-t, --"
 .list_blocks:
 	db `list-blocks:\n`
 	db `\tList the contents of a data file (filenames and blocks for each file).\n`

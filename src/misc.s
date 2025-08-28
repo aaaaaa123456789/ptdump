@@ -95,3 +95,27 @@ StringLength:
 	jnz .loop
 	sub rbx, rbp
 	ret
+
+PrintNumber:
+	; input: rax: number, rdi: buffer, ecx: length; preserves rdi
+	mov esi, 10
+.loop:
+	xor edx, edx
+	div rsi
+	add dl, "0"
+	mov [rdi + rcx - 1], dl
+	test rax, rax
+	jz .pad
+	dec ecx
+	jnz .loop
+	ret
+
+.pad:
+	dec ecx
+	jz .done
+	mov al, " "
+	mov esi, ecx
+	rep stosb
+	sub rdi, rsi
+.done:
+	ret

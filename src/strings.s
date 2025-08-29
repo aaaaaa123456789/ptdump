@@ -1,8 +1,8 @@
 Messages:
 .allocation_error:                withend db `error: failed to allocate memory\n`
 .argument_given_to_option_error:  withend db "error: argument given to option "
-.bad_block_size:                  withend db "error: bad block size for device: "
-.bad_device_size:                 withend db "error: invalid size obtained for device: "
+.bad_block_size:                  withend db "error: bad block size for "
+.bad_device_size:                 withend db "error: invalid size obtained for "
 .bad_input_type_error:            withend db "error: file is not a regular file or block device: "
 .data_file_open_paren:            withend db "error: data file ("
 .data_file_not_valid:             withend db "error: data file is not valid: "
@@ -10,8 +10,8 @@ Messages:
 .duplicate_input_filename:        withend db "error: duplicate input filename: "
 .empty_argument_error:            withend db `error: invalid empty argument\n`
 .filename_not_found_error:        withend db "error: filename not found in data file: "
-.get_block_size_error:            withend db "error: failed to get block size for device: "
-.get_device_size_error:           withend db "error: failed to get size for file or device: "
+.get_block_size_error:            withend db "error: failed to get block size for "
+.get_device_size_error:           withend db "error: failed to get size for "
 .input_filename_too_long_error:   withend db "error: input filename too long: "
 .inputs_not_paired_error:         withend db `error: input filenames must be specified in pairs for this mode\n`
 .inputs_not_valid_error:          withend db `error: input filenames must not be specified for this mode\n`
@@ -28,13 +28,13 @@ Messages:
 .output_error:                    withend db `error: failed to write output\n`
 .output_too_large_error:          withend db `error: output file too large\n`
 .read_error:                      withend db `error: failed to read from input\n`
-.read_error_file:                 withend db "error: failed to read from file or device: "
+.read_error_file:                 withend db "error: failed to read from "
 .sizes_not_valid_error:           withend db `error: size options must not be specified for this mode\n`
 .stat_error:                      withend db "error: failed to stat file: "
 .unexpected_EOF:                  withend db `error: unexpected end of input\n`
 .unexpected_EOF_file:             withend db "error: unexpected end of file: "
 .unknown_option_error:            withend db "error: unknown option: "
-.unknown_partition_table:         withend db "error: unknown partition table type for device: "
+.unknown_partition_table:         withend db "error: unknown partition table type for "
 
 FilenameStrings:
 .dev_null: db "/dev/null", 0

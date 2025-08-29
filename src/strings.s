@@ -87,6 +87,12 @@ ProgramInformation:
 	db `\tIf filename arguments are specified, only the selected disks'\n`
 	db `\tinformation will be shown.\n`
 	db "-p, --"
+.partitions:
+	db `partitions:\n`
+	db `\tPrint a list of detected partitions for each disk in a data file. If\n`
+	db `\tfilename arguments are specified, only the selected disks' partition\n`
+	db `\ttables will be shown.\n`
+	db "-k, --"
 .sfdisk:
 	db `sfdisk:\n`
 	db `\tGenerate output like that of sfdisk -d for each disk in a data file.\n`

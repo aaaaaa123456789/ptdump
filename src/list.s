@@ -1,8 +1,10 @@
 ListContentsZeroMode:
+	endbr64
 	mov byte[zListingDelimiter], 0
 	jmp ListContentsMode.list
 
 ListContentsMode:
+	endbr64
 	mov byte[zListingDelimiter], `\n`
 .list:
 	cmp dword[zInputCount], 0
@@ -38,6 +40,7 @@ ListContentsMode:
 	jmp WriteStandardOutputExit
 
 ListBlocksMode:
+	endbr64
 	call RejectSizeArguments
 	call OpenValidateDataFile
 	call CheckOpenStandardOutput

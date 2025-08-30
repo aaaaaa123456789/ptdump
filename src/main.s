@@ -1,6 +1,7 @@
 	align 4, db 0
 ExecutionModeFunctions:
 	dd DumpMappedMode
+	dd 0 ; ...
 	dd ListContentsMode
 	dd ListContentsZeroMode
 	dd ListBlocksMode
@@ -19,6 +20,7 @@ OptionTables:
 	align 4, db 0
 .long:
 	dd ProgramInformation.map
+	dd ProgramInformation.dump_sectors
 	dd ProgramInformation.list_contents
 	dd ProgramInformation.list_contents_0
 	dd ProgramInformation.list_blocks
@@ -36,10 +38,10 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "ml0tpkrcexvhdbs"
+	db "mDl0tpkrcexvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
-	db 3, 13, 15, 11, 10, 6, 7, 4, 5, 7, 7, 4, 9, 15, 15
+	db 3, 12, 13, 15, 11, 10, 6, 7, 4, 5, 7, 7, 4, 9, 15, 15
 	assert ($ - .lengths) == TOTAL_OPTION_FLAGS
 
 	global _start:function

@@ -70,6 +70,17 @@ ProgramInformation:
 	db `\tpair, the first argument indicates the name of the disk or disk image\n`
 	db `\tto back up, and the second argument indicates the filename to store in\n`
 	db `\tthe data file.\n`
+	db "-D, --"
+.dump_sectors:
+	db `dump-sectors:\n`
+	db `\tDumps specific sectors from disks or disk images. Arguments for this\n`
+	db `\toption must be specified in pairs: for each pair, the first argument\n`
+	db `\tindicates the name of the disk or disk image to use as a source, and\n`
+	db `\tthe second argument indicates the list of sectors or sector ranges to\n`
+	db `\tback up. Multiple sectors are separated by commas (e.g., 40,50), and\n`
+	db `\tranges are separated by a hyphen (e.g., 40-50) and inclusive on both\n`
+	db `\tends. An alternate filename can be specified after the list after a\n`
+	db `\tcolon (e.g., 40,50-60,70,80-90:filename.bin).\n`
 	db "-l, --"
 .list_contents:
 	db `list-contents:\n`

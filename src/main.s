@@ -117,6 +117,8 @@ Main:
 	jz .not_escaped
 	cmp bl, "-"
 	jz .long_option
+	cmp bl, "?"
+	jz HelpMode ; deliberately undocumented, -? aliasing -h
 	xor edx, edx
 .short_option_test_loop:
 	cmp bl, [rdx + OptionTables.short]

@@ -97,94 +97,18 @@ DumpPartitionTables:
 	jz .open
 	mov r15, [rsi + 8 * rcx]
 .open:
-	mov rdi, r15
-	assert O_RDONLY == 0
-	xor esi, esi
-	mov eax, open
-	syscall
-	cmp rax, -EINTR
-	jz .open
-	cmp rax, -0x1000
-	mov ebp, Messages.open_error
-	mov ebx, Messages.open_error_end - Messages.open_error
-	jnc FilenameErrorExit
-	mov [zCurrentFD], eax
-	mov edi, eax
-	mov esi, zStatBuffer
-	mov eax, fstat
-	syscall
-	cmp rax, -0x1000
-	mov ebp, Messages.stat_error
-	mov ebx, Messages.stat_error_end - Messages.stat_error
-	jnc FilenameErrorExit
-	assert (S_IFMT & ~0xff00) == 0
-	mov al, [zStatBuffer + st_mode + 1]
-	and al, S_IFMT >> 8
-	cmp al, S_IFREG >> 8
-	jz .regular_file_input
-	cmp al, S_IFBLK >> 8
-	mov ebp, Messages.bad_input_type_error
-	mov ebx, Messages.bad_input_type_error_end - Messages.bad_input_type_error
-	jnz FilenameErrorExit
-
-	mov edi, [zCurrentFD]
-	mov esi, BLKSSZGET
-	mov edx, zGenericDataBuffer
-	mov eax, ioctl
-	syscall
-	cmp rax, -0x1000
-	mov ebp, Messages.get_block_size_error
-	mov ebx, Messages.get_block_size_error_end - Messages.get_block_size_error
-	jnc FilenameErrorExit
-	mov eax, [zGenericDataBuffer]
-	cmp eax, MAXIMUM_BLOCK_SIZE
-	mov ebp, Messages.bad_block_size
-	mov ebx, Messages.bad_block_size_end - Messages.bad_block_size
-	ja FilenameErrorExit
-	cmp eax, 512
-	jc FilenameErrorExit
-	test al, 7
-	jnz FilenameErrorExit
-	mov [r12 + inputdev.block_size], eax
-	mov edi, [zCurrentFD]
-	mov esi, BLKGETSIZE64
-	mov edx, zGenericDataBuffer
-	mov eax, ioctl
-	syscall
-	cmp rax, -0x1000
-	mov ebp, Messages.get_device_size_error
-	mov ebx, Messages.get_device_size_error_end - Messages.get_device_size_error
-	jnc FilenameErrorExit
-	mov rax, [zGenericDataBuffer]
-	mov edi, [r12 + inputdev.block_size]
-	jmp .got_input_size
-
-.regular_file_input:
-	; zStatBuffer still contains the result of fstat
-	mov rax, [zStatBuffer + st_size]
-	mov edi, [zDefaultFileBlockSize]
-	mov [r12 + inputdev.block_size], edi
-.got_input_size:
-	xor edx, edx
-	div rdi
-	test edx, edx
-	mov ebp, Messages.bad_device_size
-	mov ebx, Messages.bad_device_size_end - Messages.bad_device_size
-	jnz FilenameErrorExit
-	cmp rax, 2
-	jc FilenameErrorExit
+	call OpenInputDevice
 	mov [r12 + inputdev.size], rax
-
+	mov [r12 + inputdev.block_size], ebx
 	mov edx, [r12 + inputdev.header_size]
-	lea r14d, [edi + edi]
+	lea r14d, [ebx + ebx]
 	cmp r14d, edx
 	cmovc r14d, edx
 	cmp r14, rax
 	cmovnc r14, rax
 	mov eax, r14d
 	xor edx, edx
-	mov edi, [r12 + inputdev.block_size]
-	div edi
+	div ebx
 	test edx, edx
 	jz .header_size_exact
 	sub r14d, edx
@@ -839,6 +763,89 @@ WriteStandardOutputExit:
 	mov ebp, Messages.output_error
 	mov ebx, Messages.output_error_end - Messages.output_error
 	jmp ErrorExit
+
+OpenInputDevice:
+	; in: r15: input filename; out: [zCurrentFD]: FD, ebx: logical block size, rax: block count; preserves r15
+	mov rdi, r15
+	assert O_RDONLY == 0
+	xor esi, esi
+	mov eax, open
+	syscall
+	cmp rax, -EINTR
+	jz OpenInputDevice
+	cmp rax, -0x1000
+	mov ebp, Messages.open_error
+	mov ebx, Messages.open_error_end - Messages.open_error
+	jnc FilenameErrorExit
+	mov [zCurrentFD], eax
+	mov edi, eax
+	mov esi, zStatBuffer
+	mov eax, fstat
+	syscall
+	cmp rax, -0x1000
+	mov ebp, Messages.stat_error
+	mov ebx, Messages.stat_error_end - Messages.stat_error
+	jnc FilenameErrorExit
+	assert (S_IFMT & ~0xff00) == 0
+	mov al, [zStatBuffer + st_mode + 1]
+	and al, S_IFMT >> 8
+	cmp al, S_IFREG >> 8
+	jz .regular_file_input
+	cmp al, S_IFBLK >> 8
+	mov ebp, Messages.bad_input_type_error
+	mov ebx, Messages.bad_input_type_error_end - Messages.bad_input_type_error
+	jnz FilenameErrorExit
+
+	mov edi, [zCurrentFD]
+	mov esi, BLKSSZGET
+	mov edx, zGenericDataBuffer
+	mov eax, ioctl
+	syscall
+	cmp rax, -0x1000
+	mov ebp, Messages.get_block_size_error
+	mov ebx, Messages.get_block_size_error_end - Messages.get_block_size_error
+	jnc FilenameErrorExit
+	mov ebx, [zGenericDataBuffer]
+	cmp ebx, MAXIMUM_BLOCK_SIZE
+	ja .bad_block_size
+	cmp ebx, 512
+	jc .bad_block_size
+	test bl, 7
+	jnz .bad_block_size
+	mov edi, [zCurrentFD]
+	mov esi, BLKGETSIZE64
+	mov edx, zGenericDataBuffer
+	mov eax, ioctl
+	syscall
+	cmp rax, -0x1000
+	mov rax, [zGenericDataBuffer]
+	jc .got_input_size
+	mov ebp, Messages.get_device_size_error
+	mov ebx, Messages.get_device_size_error_end - Messages.get_device_size_error
+	jmp FilenameErrorExit
+
+.regular_file_input:
+	; zStatBuffer still contains the result of fstat
+	mov rax, [zStatBuffer + st_size]
+	mov ebx, [zDefaultFileBlockSize]
+.got_input_size:
+	xor edx, edx
+	div rbx
+	test edx, edx
+	jnz .bad_device_size
+	cmp rax, 2
+	jc .bad_device_size
+	ret
+
+.bad_block_size:
+	mov ebp, Messages.bad_block_size
+	mov ebx, Messages.bad_block_size_end - Messages.bad_block_size
+	jmp FilenameErrorExit
+
+.bad_device_size:
+	mov ebp, Messages.bad_device_size
+	mov ebx, Messages.bad_device_size_end - Messages.bad_device_size
+	jmp FilenameErrorExit
 
 AppendBlock:
 	; in: r12: inputdev, rdi: block number; out: rsi: block

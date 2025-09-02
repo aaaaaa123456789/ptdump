@@ -382,12 +382,11 @@ DumpSectorsMode:
 	not rcx
 	mov rdx, rcx
 	shr rdx, 10
-	mov edi, [rsi + 8]
+	movsx rdi, dword[rsi + 8]
 	cmp edi, "file"
 	jz .file_offset
 	test edi, edi
 	jns .run_offset
-	movsx rdi, edi
 	movzx ecx, cl
 	lea rdi, [rdi + rcx - 1]
 	lea r9, [rbp + 4 * rdi]

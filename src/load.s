@@ -157,32 +157,16 @@ LoadFilenameTable:
 	xchg ebx, r14d
 	xchg rbp, r13
 	call SortPairs
-	mov edx, ebx
-	dec edx
-	jz .done
-	shl rdx, 4
-.check:
-	mov rcx, [rbp + rdx]
-	cmp rcx, [rbp + rdx - 16]
-	jnz .next
-	movzx ecx, cx
-	mov esi, [rbp + rdx + 8]
-	mov edi, [rbp + rdx - 8]
-	lea rsi, [rbp + 4 * rsi]
-	lea rdi, [rbp + 4 * rdi]
-	repz cmpsb
-	jz .duplicate
-.next:
-	sub rdx, 16
-	jnz .check
-.done:
+	mov edx, .callback
+	call CallForMatchingPairs
+	jc .duplicate
 	xchg rbp, r13
 	xchg ebx, r14d
 	ret
 
 .duplicate:
-	lea r12, [rbp + rdx + 8]
-	movzx r13d, word[rbp + rdx]
+	mov r12, rax
+	movzx r13d, r11w
 	mov ebp, FilenameStrings.stdin
 	test r15, r15
 	cmovnz rbp, r15
@@ -208,6 +192,19 @@ LoadFilenameTable:
 	lea rbx, [rdi + 1]
 	mov rbp, rax
 	jmp ErrorExit
+
+.callback:
+	endbr64
+	mov esi, esi
+	mov edi, edi
+	lea rsi, [r13 + 4 * rsi]
+	lea rdi, [r13 + 4 * rdi]
+	mov rax, rsi
+	movzx ecx, r11w
+	repz cmpsb
+	setnz cl
+	sub cl, 1
+	ret
 
 GetFilenameSortingKey:
 	; in: rsi: filename, ecx: length (assumed nonzero); out: rdi: key (bits 0-15: length, 32-63: CRC)

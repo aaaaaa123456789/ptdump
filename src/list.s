@@ -42,11 +42,15 @@ ListContentsMode:
 ListBlocksMode:
 	endbr64
 	call RejectSizeArguments
+	mov r12d, [zInputCount]
+	test r12d, r12d
+	jz .skip_duplicate_check
+	call CheckDuplicateInputFilename
+.skip_duplicate_check:
 	call OpenValidateDataFile
 	call CheckOpenStandardOutput
 	mov esi, 0x1000
 	call AllocateCurrentBuffer
-	mov r12d, [zInputCount]
 	test r12d, r12d
 	jnz .specific_filenames
 	mov [zCurrentInputOffset], ebx

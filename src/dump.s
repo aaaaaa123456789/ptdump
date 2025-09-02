@@ -1,16 +1,20 @@
 DumpMappedMode:
 	endbr64
-	mov esi, [zInputCount]
-	test esi, esi
+	mov edx, [zInputCount]
+	test edx, edx
 	jz NoInputsExit
-	test esi, 1
+	shr edx, 1
 	mov ebp, Messages.inputs_not_paired_error
 	mov ebx, Messages.inputs_not_paired_error_end - Messages.inputs_not_paired_error
-	jnz BadInvocationExit
-	mov r12, rsi
+	jc BadInvocationExit
+	mov rbp, [zInputFilenames]
+	add rbp, 8
+	mov ebx, 16
+	call CheckDuplicateFilename
+	mov r12d, edx
 	assert inputdev_size == 128
-	shl r12, 6
-	lea rsi, [r12 + 4 * rsi]
+	shl r12, 7
+	lea rsi, [r12 + 8 * rdx]
 	call Allocate
 	assert zInputFilenames == zInputDevices
 	mov rsi, [zInputFilenames]
@@ -47,9 +51,10 @@ DumpMappedMode:
 
 DefaultDumpMode:
 	endbr64
-	mov esi, [zInputCount]
-	test esi, esi
+	cmp dword[zInputCount], 0
 	jz NoInputsExit
+	call CheckDuplicateInputFilename
+	mov esi, edx
 	assert inputdev_size == 128
 	shl rsi, 7
 	call Allocate

@@ -293,7 +293,6 @@ Main:
 	sub rdi, rax
 	shr rdi, 3
 	mov [zInputCount], edi
-	mov r13d, edi
 	shr rdi, 32
 	jnz Abort
 	sub rax, rsp
@@ -301,50 +300,6 @@ Main:
 	mov [zSizeSpecCount], eax
 	shr rax, 32
 	jnz Abort
-	test r13d, r13d
-	jz .go
-	mov r14, rsp
-	and rsp, -16
-	xor edx, edx
-.load_filename_list_loop:
-	mov rsi, [r12 + 8 * rdx]
-	push rsi
-	mov rbp, rsi
-	call StringLength
-	cmp rbx, 0x10000
-	mov ecx, ebx
-	mov ebp, Messages.filename_too_long_error
-	mov ebx, Messages.filename_too_long_error_end - Messages.filename_too_long_error
-	jnc .option_error_exit_pushed
-	call GetFilenameSortingKey
-	push rdi
-	inc edx
-	cmp edx, r13d
-	jc .load_filename_list_loop
-	mov rbp, rsp
-	mov ebx, r13d
-	call SortPairs
-	dec r13d
-	jz .restore_stack
-	shl r13, 4
-	mov ebp, Messages.duplicate_input_filename
-	mov ebx, Messages.duplicate_input_filename_end - Messages.duplicate_input_filename
-.check_filename_loop:
-	mov rcx, [rsp + r13]
-	cmp rcx, [rsp + r13 - 16]
-	jnz .next_filename
-	movzx ecx, cx
-	mov rsi, [rsp + r13 + 8]
-	mov rax, rsi
-	mov rdi, [rsp + r13 - 8]
-	repz cmpsb
-	jz .option_error_exit
-.next_filename:
-	sub r13, 16
-	jnz .check_filename_loop
-.restore_stack:
-	mov rsp, r14
-.go:
 	movzx eax, byte[zExecutionMode]
 	mov eax, [4 * rax + ExecutionModeFunctions]
 	jmp rax

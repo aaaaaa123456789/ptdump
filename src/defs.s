@@ -27,6 +27,20 @@ struc inputdev
 	.extra_sector_table:              resb 8 ; table of (number, pointer); (0, pointer) continues, (0, 0) ends
 endstruc
 
+struc inputsect
+	.input_filename:    resb 8
+	.output_filename:   resb 8
+	.range_list:        resb 8 ; table of (start, length, output offset)
+	.block_list_offset:
+	.range_count:       resb 4
+	.total_sectors:     resb 4
+	.block_size:        resb 4
+	.file_descriptor:   resb 4
+	.filename_offset:   resb 4
+	.filename_length:   resb 2
+	                    resb 2 ; padding
+endstruc
+
 %assign EXECUTION_MODE_OPTIONS         13
 %assign HEADER_SIZE_DEFAULT      0x100000 ;   1 MB
 %assign HEADER_SIZE_LIMIT       0x1000000 ;  16 MB

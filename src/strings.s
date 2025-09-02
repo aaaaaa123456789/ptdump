@@ -10,12 +10,13 @@ Messages:
 .duplicate_input_filename:        withend db "error: duplicate input filename: "
 .empty_argument_error:            withend db `error: invalid empty argument\n`
 .filename_not_found_error:        withend db "error: filename not found in data file: "
+.filename_too_long_error:         withend db "error: filename too long: "
 .get_block_size_error:            withend db "error: failed to get block size for "
 .get_device_size_error:           withend db "error: failed to get size for "
-.input_filename_too_long_error:   withend db "error: input filename too long: "
 .inputs_not_paired_error:         withend db `error: input filenames must be specified in pairs for this mode\n`
 .inputs_not_valid_error:          withend db `error: input filenames must not be specified for this mode\n`
 .invalid_block_size_error:        withend db "error: invalid block size: "
+.invalid_sector_list:             withend db "error: sector list invalid or too large: "
 .invalid_size_error:              withend db "error: invalid size: "
 .multiple_data_files_error:       withend db `error: multiple data files specified\n`
 .multiple_execution_modes_error:  withend db `error: multiple execution modes specified\n`
@@ -27,6 +28,7 @@ Messages:
 .open_error:                      withend db "error: failed to open file: "
 .output_error:                    withend db `error: failed to write output\n`
 .output_too_large_error:          withend db `error: output file too large\n`
+.range_beyond_the_end_error:      withend db "error: sector range extends beyond the end of "
 .read_error:                      withend db `error: failed to read from input\n`
 .read_error_file:                 withend db "error: failed to read from "
 .sizes_not_valid_error:           withend db `error: size options must not be specified for this mode\n`

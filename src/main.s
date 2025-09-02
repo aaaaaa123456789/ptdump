@@ -1,7 +1,7 @@
 	align 4, db 0
 ExecutionModeFunctions:
 	dd DumpMappedMode
-	dd 0 ; ...
+	dd DumpSectorsMode
 	dd ListContentsMode
 	dd ListContentsZeroMode
 	dd ListBlocksMode
@@ -279,6 +279,8 @@ Main:
 	cmp byte[rax + 1], "/"
 	jnz .not_escaped
 	add rax, 2
+	cmp byte[rax], 0
+	jz .argument_loop ; jump right into the error
 .not_escaped:
 	stosq
 .next_argument:
@@ -311,8 +313,8 @@ Main:
 	call StringLength
 	cmp rbx, 0x10000
 	mov ecx, ebx
-	mov ebp, Messages.input_filename_too_long_error
-	mov ebx, Messages.input_filename_too_long_error_end - Messages.input_filename_too_long_error
+	mov ebp, Messages.filename_too_long_error
+	mov ebx, Messages.filename_too_long_error_end - Messages.filename_too_long_error
 	jnc .option_error_exit_pushed
 	call GetFilenameSortingKey
 	push rdi

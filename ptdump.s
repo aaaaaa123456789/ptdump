@@ -13,6 +13,7 @@
 %include "src/strings.s"
 %include "src/main.s"
 %include "src/dump.s"
+%include "src/dumpsect.s"
 %include "src/list.s"
 %include "src/load.s"
 %include "src/fileio.s"

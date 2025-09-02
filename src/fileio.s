@@ -209,37 +209,28 @@ OpenInputDevice:
 	cmp rax, -EINTR
 	jz OpenInputDevice
 	cmp rax, -0x1000
-	mov ebp, Messages.open_error
-	mov ebx, Messages.open_error_end - Messages.open_error
-	jnc FilenameErrorExit
+	jnc .open_error
 	mov [zCurrentFD], eax
 	mov edi, eax
 	mov esi, zStatBuffer
 	mov eax, fstat
 	syscall
 	cmp rax, -0x1000
-	mov ebp, Messages.stat_error
-	mov ebx, Messages.stat_error_end - Messages.stat_error
-	jnc FilenameErrorExit
+	jnc .stat_error
 	assert (S_IFMT & ~0xff00) == 0
 	mov al, [zStatBuffer + st_mode + 1]
 	and al, S_IFMT >> 8
 	cmp al, S_IFREG >> 8
 	jz .regular_file_input
 	cmp al, S_IFBLK >> 8
-	mov ebp, Messages.bad_input_type_error
-	mov ebx, Messages.bad_input_type_error_end - Messages.bad_input_type_error
-	jnz FilenameErrorExit
-
+	jnz .bad_input_type
 	mov edi, [zCurrentFD]
 	mov esi, BLKSSZGET
 	mov edx, zGenericDataBuffer
 	mov eax, ioctl
 	syscall
 	cmp rax, -0x1000
-	mov ebp, Messages.get_block_size_error
-	mov ebx, Messages.get_block_size_error_end - Messages.get_block_size_error
-	jnc FilenameErrorExit
+	jnc .block_size_error
 	mov ebx, [zGenericDataBuffer]
 	cmp ebx, MAXIMUM_BLOCK_SIZE
 	ja .bad_block_size
@@ -272,11 +263,26 @@ OpenInputDevice:
 	jc .bad_device_size
 	ret
 
+.open_error:
+	mov ebp, Messages.open_error
+	mov ebx, Messages.open_error_end - Messages.open_error
+	jmp FilenameErrorExit
+.stat_error:
+	mov ebp, Messages.stat_error
+	mov ebx, Messages.stat_error_end - Messages.stat_error
+	jmp FilenameErrorExit
+.bad_input_type:
+	mov ebp, Messages.bad_input_type_error
+	mov ebx, Messages.bad_input_type_error_end - Messages.bad_input_type_error
+	jmp FilenameErrorExit
+.block_size_error:
+	mov ebp, Messages.get_block_size_error
+	mov ebx, Messages.get_block_size_error_end - Messages.get_block_size_error
+	jmp FilenameErrorExit
 .bad_block_size:
 	mov ebp, Messages.bad_block_size
 	mov ebx, Messages.bad_block_size_end - Messages.bad_block_size
 	jmp FilenameErrorExit
-
 .bad_device_size:
 	mov ebp, Messages.bad_device_size
 	mov ebx, Messages.bad_device_size_end - Messages.bad_device_size

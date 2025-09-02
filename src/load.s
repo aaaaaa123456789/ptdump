@@ -225,6 +225,66 @@ GetFilenameSortingKey:
 	or rdi, rax
 	ret
 
+FindDuplicateFilename:
+	; in: rbp: pointer to first filename entry, rdx: count (preserved), rbx: offset to next; out: rbx: duplicate or null
+	cmp rdx, 2
+	jc .empty
+	lea rsi, [rdx + rdx]
+	lea rsi, [8 * rsi + 0xfff]
+	and rsi, -0x1000
+	push rbp
+	push rdx
+	push rsi
+	call AllocateAligned
+	mov r10, rbp
+	mov r9, rbx
+	mov r8, [rsp + 8]
+	shl r8, 4
+.fill_loop:
+	mov rbp, [r10]
+	add r10, r9
+	mov [rax + r8 - 8], rbp
+	push rax
+	call StringLength
+	mov ecx, ebx
+	mov rsi, rbp
+	call GetFilenameSortingKey
+	pop rax
+	sub r8, 16
+	mov [rax + r8], rdi
+	jnz .fill_loop
+	mov rbp, rax
+	mov rbx, [rsp + 8]
+	call SortPairs
+	lea r8, [rbx + rbx]
+	lea r8, [8 * r8 - 16]
+.check_loop:
+	mov rcx, [rbp + r8]
+	cmp rcx, [rbp + r8 - 16]
+	jnz .next
+	mov rsi, [rbp + r8 + 8]
+	mov rdi, [rbp + r8 - 8]
+	movzx ecx, cx
+	mov rbx, rsi
+	repz cmpsb
+	jz .found
+.next:
+	sub r8, 16
+	jnz .check_loop
+	xor ebx, ebx
+.found:
+	mov rdi, rbp
+	pop rsi
+	mov eax, munmap
+	syscall
+	pop rdx
+	pop rbp
+	ret
+
+.empty:
+	xor ebx, ebx
+	ret
+
 FindFilenameInTable:
 	; in: r13: filename table, r14d: filename table size, rsi: searched filename; out: eax: index
 	mov r11, rsi

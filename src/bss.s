@@ -23,6 +23,7 @@ zGenericDataBuffer:        resb 8
 zCurrentFilename:
 zRealFilenames:            resb 8
 zInputBlockListPointer:    resb 8
+zRemainingInputCount:      resb 4
 zCurrentInputOffset:
 zCurrentInputIndex:        resb 4
 zCurrentBufferSize:        resb 4

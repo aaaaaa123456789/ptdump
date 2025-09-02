@@ -145,8 +145,8 @@ DumpSectorsMode:
 .got_ranges:
 	mov ebx, [r12 + inputsect.range_count]
 	cmp ebx, 1
-	jz .validated_ranges
 	mov rbp, [r12 + inputsect.range_list]
+	jz .validated_ranges
 	call SortPairs
 	shl ebx, 4
 	add rbx, rbp
@@ -190,7 +190,7 @@ DumpSectorsMode:
 	mov ecx, [r12 + inputsect.range_count]
 	xor edx, edx
 .sum_ranges_loop:
-	add edx, [rdi + 8]
+	add edx, [rbp + 8]
 	jc .invalid_range
 	add rdi, 16
 	dec ecx

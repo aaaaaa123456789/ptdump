@@ -215,15 +215,8 @@ DumpSectorsMode:
 	add rbp, inputsect.output_filename
 	mov edx, [zInputCount]
 	mov ebx, inputsect_size
-	call FindDuplicateFilename
-	test rbx, rbx
-	jz .open_files
-	mov rax, rbx
-	mov ebp, Messages.duplicate_input_filename
-	mov ebx, Messages.duplicate_input_filename_end - Messages.duplicate_input_filename
-	jmp Main.option_error_exit
+	call CheckDuplicateFilename
 
-.open_files:
 	xor r13d, r13d
 	xor r14d, r14d
 	mov r12d, edx

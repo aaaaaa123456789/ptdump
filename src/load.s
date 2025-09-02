@@ -225,15 +225,15 @@ GetFilenameSortingKey:
 	or rdi, rax
 	ret
 
-FindDuplicateFilename:
-	; in: rbp: pointer to first filename entry, rdx: count (preserved), rbx: offset to next; out: rbx: duplicate or null
+CheckDuplicateFilename:
+	; in: rbp: pointer to first filename entry, rdx: count, rbx: offset to next; preserves rbp, rdx (not rbx)
 	cmp rdx, 2
-	jc .empty
+	jc .done
+	push rbp
+	push rdx
 	lea rsi, [rdx + rdx]
 	lea rsi, [8 * rsi + 0xfff]
 	and rsi, -0x1000
-	push rbp
-	push rdx
 	push rsi
 	call AllocateAligned
 	mov r10, rbp
@@ -265,25 +265,25 @@ FindDuplicateFilename:
 	mov rsi, [rbp + r8 + 8]
 	mov rdi, [rbp + r8 - 8]
 	movzx ecx, cx
-	mov rbx, rsi
+	mov rax, rsi
 	repz cmpsb
-	jz .found
+	jz .fail
 .next:
 	sub r8, 16
 	jnz .check_loop
-	xor ebx, ebx
-.found:
 	mov rdi, rbp
 	pop rsi
 	mov eax, munmap
 	syscall
 	pop rdx
 	pop rbp
+.done:
 	ret
 
-.empty:
-	xor ebx, ebx
-	ret
+.fail:
+	mov ebp, Messages.duplicate_input_filename
+	mov ebx, Messages.duplicate_input_filename_end - Messages.duplicate_input_filename
+	jmp Main.option_error_exit
 
 FindFilenameInTable:
 	; in: r13: filename table, r14d: filename table size, rsi: searched filename; out: eax: index

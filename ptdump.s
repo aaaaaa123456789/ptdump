@@ -11,6 +11,8 @@
 	section .text align=1
 
 %include "src/strings.s"
+%include "src/cliopt.s"
+; data above this line; code below this line
 %include "src/main.s"
 %include "src/dump.s"
 %include "src/dumpsect.s"

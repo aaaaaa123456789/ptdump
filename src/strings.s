@@ -64,8 +64,8 @@ ProgramInformation:
 	db `prefix will be stripped from the filename.)\n\n`
 	db `Alternate execution modes:\n`
 	db "-m, --"
-.map:
-	db `map:\n`
+.map: withend db "map"
+	db `:\n`
 	db `\tDumps partition tables, as in the default operation mode, but mapping\n`
 	db `\tthe corresponding disk or disk images to the specified filenames.\n`
 	db `\tFilename arguments for this option must be specified in pairs: for each\n`
@@ -73,8 +73,8 @@ ProgramInformation:
 	db `\tto back up, and the second argument indicates the filename to store in\n`
 	db `\tthe data file.\n`
 	db "-D, --"
-.dump_sectors:
-	db `dump-sectors:\n`
+.dump_sectors: withend db "dump-sectors"
+	db `:\n`
 	db `\tDumps specific sectors from disks or disk images. Arguments for this\n`
 	db `\toption must be specified in pairs: for each pair, the first argument\n`
 	db `\tindicates the name of the disk or disk image to use as a source, and\n`
@@ -84,44 +84,44 @@ ProgramInformation:
 	db `\tends. An alternate filename can be specified after the list after a\n`
 	db `\tcolon (e.g., 40,50-60,70,80-90:filename.bin).\n`
 	db "-l, --"
-.list_contents:
-	db `list-contents:\n`
+.list_contents: withend db "list-contents"
+	db `:\n`
 	db `\tList the contents of a data file (filenames only). Filename arguments\n`
 	db `\tare not allowed for this mode.\n`
 	db "-0, --"
-.list_contents_0:
-	db `list-contents-0:\n`
+.list_contents_0: withend db "list-contents-0"
+	db `:\n`
 	db `\tLike the previous mode, but filenames are separated by null bytes\n`
 	db `\tinstead of newlines (as expected by xargs -0 and similar tools).\n`
 	db "-t, --"
-.list_blocks:
-	db `list-blocks:\n`
+.list_blocks: withend db "list-blocks"
+	db `:\n`
 	db `\tList the contents of a data file (filenames and blocks for each file).\n`
 	db `\tIf filename arguments are specified, only the selected disks'\n`
 	db `\tinformation will be shown.\n`
 	db "-p, --"
-.partitions:
-	db `partitions:\n`
+.partitions: withend db "partitions"
+	db `:\n`
 	db `\tPrint a list of detected partitions for each disk in a data file. If\n`
 	db `\tfilename arguments are specified, only the selected disks' partition\n`
 	db `\ttables will be shown.\n`
 	db "-k, --"
-.sfdisk:
-	db `sfdisk:\n`
+.sfdisk: withend db "sfdisk"
+	db `:\n`
 	db `\tGenerate output like that of sfdisk -d for each disk in a data file.\n`
 	db `\tIf filename arguments are specified, only the selected disks'\n`
 	db `\tpartition tables will be shown.\n`
 	db "-r, --"
-.restore:
-	db `restore:\n`
+.restore: withend db "restore"
+	db `:\n`
 	db `\tRestore the contents of a data file to the corresponding disks or disk\n`
 	db `\timages. If filename arguments are specified, only the selected disks\n`
 	db `\twill be restored. This mode of operation assumes that the disks or disk\n`
 	db `\timages have the same names as in the data file; use the -c or --copy\n`
 	db `\toption to manually specify the name of the outputs.\n`
 	db "-c, --"
-.copy:
-	db `copy:\n`
+.copy: withend db "copy"
+	db `:\n`
 	db `\tCopy the contents of the partition tables for specific disk or disk\n`
 	db `\timages stored in the data file to designated locations. (This mode can\n`
 	db `\talso be used to restore a partition table when the destination has a\n`
@@ -130,41 +130,41 @@ ProgramInformation:
 	db `\tthe first argument indicates the filename stored in the data file, and\n`
 	db `\tthe second argument indicates the destination filename.\n`
 	db "-e, --"
-.merge:
-	db `merge:\n`
+.merge: withend db "merge"
+	db `:\n`
 	db `\tCompacts and merges multiple data files into a single one. (For this\n`
 	db `\tmode, the filename arguments are the input data files.) Use "-" as a\n`
 	db `\tfilename argument to read from standard input.\n`
 	db "-x, --"
-.extract:
-	db `extract:\n`
+.extract: withend db "extract"
+	db `:\n`
 	db `\tExtracts the contents for one or more disks (or disk images) from a\n`
 	db `\tdata file into a new one. The first filename argument for this mode is\n`
 	db `\tthe data file to extract from (use "-" to read from standard input);\n`
 	db `\tother filename arguments represent the filenames to extract.\n`
 	db "-v, --"
-.version:
-	db `version: show version information and exit.\n`
+.version: withend db "version"
+	db `: show version information and exit.\n`
 	db "-h, --"
-.help:
-	db `help: show this help screen and exit.\n\n`
+.help: withend db "help"
+	db `: show this help screen and exit.\n\n`
 	db `Other options:\n`
 	db "-d filename, --"
-.data_file:
-	db `data-file filename:\n`
+.data_file: withend db "data-file"
+	db ` filename:\n`
 	db `\tIndicates the location where the data file will be written to (or read\n`
 	db `\tfrom, if appropriate). Default: standard output/input.\n`
 	db "-b size, --"
-.file_block_size:
-	db `file-block-size size:\n`
+.file_block_size: withend db "file-block-size"
+	db ` size:\n`
 	db `\tDetermines the block size to be used for regular files being treated as\n`
 	db `\tdisk images. (Actual block devices always use their true block sizes.)\n`
 	db `\tBlock sizes must be between 512 and 262,144 bytes, and they must be\n`
 	db `\tmultiples of 8 bytes; the 'k' suffix may be used to indicate that the\n`
 	db `\tvalue is in kiB (1k = 1,024 bytes). Default: 512 bytes.\n`
 	db "-s size, --"
-.max_header_size:
-	db `max-header-size size:\n`
+.max_header_size: withend db "max-header-size"
+	db ` size:\n`
 	db `\tSpecifies the maximum size of a disk's header to be dumped into the\n`
 	db `\tdata file. This option is position-sensitive: it will only apply to\n`
 	db `\tfilename arguments that come after it. Values that are smaller than\n`

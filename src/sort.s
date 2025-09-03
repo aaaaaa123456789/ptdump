@@ -132,3 +132,49 @@ SortPairs:
 	cmp rdi, 2
 	jnc .recurse
 	ret
+
+CallForMatchingPairs:
+	; in: rbp: sorted key/value table, rbx: table length (non-zero), rdx: callback
+	; calls the callback for each pair of entries with the same key, with rsi = #1 value, rdi = #2 value, r11 = key
+	; exits immediately if the callback returns carry and returns the callback's registers; returns no carry otherwise
+	; the callback must preserve all registers other than rax, rcx, rsi and rdi
+	sub rbx, 1 ; will also clear carry
+	jz .done
+	xor r8d, r8d
+.find_pairs_loop:
+	lea rsi, [r8 + r8]
+	lea rsi, [rbp + 8 * rsi]
+	lea r9, [r8 - 1]
+	mov r11, [rsi]
+.check_next_key:
+	inc r9
+	cmp r9, rbx
+	jnc .got_range
+	add rsi, 16
+	cmp r11, [rsi]
+	jz .check_next_key
+.got_range:
+	cmp r8, r9
+	jz .next_key
+.outer_loop:
+	mov r10, r8
+.inner_loop:
+	inc r10
+	lea rsi, [r8 + r8]
+	lea rdi, [r10 + r10]
+	mov rsi, [rbp + 8 * rsi + 8]
+	mov rdi, [rbp + 8 * rdi + 8]
+	call rdx
+	jc .done
+	cmp r10, r9
+	jc .inner_loop
+	inc r8
+	cmp r8, r9
+	jc .outer_loop
+.next_key:
+	inc r8
+	cmp r8, rbx
+	jc .find_pairs_loop
+.done:
+	inc rbx ; doesn't affect carry
+	ret

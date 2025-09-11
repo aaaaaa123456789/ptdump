@@ -11,6 +11,7 @@ ExecutionModeFunctions:
 	dd 0 ; ...
 	dd 0 ; ...
 	dd 0 ; ...
+	dd ShowPartitionTypesMode
 	dd VersionMode
 	dd HelpMode
 	assert ($ - ExecutionModeFunctions) / 4 == EXECUTION_MODE_OPTIONS
@@ -30,6 +31,7 @@ OptionTables:
 	dd ProgramInformation.copy
 	dd ProgramInformation.merge
 	dd ProgramInformation.extract
+	dd ProgramInformation.show_partition_types
 	dd ProgramInformation.version
 	dd ProgramInformation.help
 	assert ($ - .long) / 4 == EXECUTION_MODE_OPTIONS
@@ -38,7 +40,7 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "mDl0tpkrcexvhdbs"
+	db "mDl0tpkrcexTvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
 	db ProgramInformation.map_end - ProgramInformation.map
@@ -52,6 +54,7 @@ OptionTables:
 	db ProgramInformation.copy_end - ProgramInformation.copy
 	db ProgramInformation.merge_end - ProgramInformation.merge
 	db ProgramInformation.extract_end - ProgramInformation.extract
+	db ProgramInformation.show_partition_types_end - ProgramInformation.show_partition_types
 	db ProgramInformation.version_end - ProgramInformation.version
 	db ProgramInformation.help_end - ProgramInformation.help
 	assert ($ - .lengths) == EXECUTION_MODE_OPTIONS

@@ -45,6 +45,10 @@ FilenameStrings:
 TableHeaders: withend db `           block#    count  bsize      offset filename\n`
 .one_file:    withend db `           block#    count  bsize      offset\n`
 
+Headers:
+.MBR_types: withend db `MBR partition types:\n`
+.GPT_types: withend db `\nGPT partition types:\n`
+
 ProgramInformation:
 	; version information first; will be printed on its own by -v/--version
 	db "ptdump - partition table dumper - version "
@@ -142,6 +146,9 @@ ProgramInformation:
 	db `\tdata file into a new one. The first filename argument for this mode is\n`
 	db `\tthe data file to extract from (use "-" to read from standard input);\n`
 	db `\tother filename arguments represent the filenames to extract.\n`
+	db "-T, --"
+.show_partition_types: withend db "show-partition-types"
+	db `: list all known partition types and IDs.\n`
 	db "-v, --"
 .version: withend db "version"
 	db `: show version information and exit.\n`

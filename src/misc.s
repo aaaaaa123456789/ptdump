@@ -39,7 +39,7 @@ AllocateAligned:
 DoAllocationCall:
 	syscall
 	cmp rax, -0x1000
-	jc WriteData.done ; any return will do
+	jc ResizeCurrentBuffer.done ; any return will do
 AllocationErrorExit:
 	mov ebp, Messages.allocation_error
 	mov ebx, Messages.allocation_error_end - Messages.allocation_error

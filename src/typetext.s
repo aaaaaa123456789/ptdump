@@ -118,7 +118,7 @@ RenderHexByte:
 	cmp ah, 10
 	cmc
 	sbb dh, dh
-	and dx, 0x0707
+	and dx, 0x707
 	add ax, 0x3030
 	add ax, dx
 	mov [rdi], ax

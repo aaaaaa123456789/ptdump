@@ -300,8 +300,8 @@ PartitionTypeLabels:
 .fuchsia_test_legacy:   multilabel fuchsia, test, hyphen, legacy
 .fuchsia_vbmeta:        multilabel fuchsia, verified, boot, metadata
 .fuchsia_vbmetaA_leg:   multilabel fuchsia, verified, boot, metadata, slotA_parens, hyphen, legacy
-.fuchsia_vbmetaB_leg:   multilabel fuchsia, verified, boot, metadata, slotA_parens, hyphen, legacy
-.fuchsia_vbmetaR_leg:   multilabel fuchsia, verified, boot, metadata, slotA_parens, hyphen, legacy
+.fuchsia_vbmetaB_leg:   multilabel fuchsia, verified, boot, metadata, slotB_parens, hyphen, legacy
+.fuchsia_vbmetaR_leg:   multilabel fuchsia, verified, boot, metadata, slotR_parens, hyphen, legacy
 .fuchsia_VM_legacy:     multilabel fuchsia, volume_manager, hyphen, legacy
 .fuchsia_vol_manager:   multilabel fuchsia, volume_manager
 .goback:                counted db "GoBack"

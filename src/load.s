@@ -452,19 +452,22 @@ LoadFilenameTable:
 	ret
 
 GetFilenameSortingKey:
-	; in: rsi: filename, ecx: length (assumed nonzero); out: rdi: key (bits 0-15: length, 32-63: CRC)
-	mov eax, ecx
-	shl eax, 8
-	stc
-	sbb edi, edi
-.loop:
-	lodsb
-	crc32 edi, al
-	dec ecx
-	jnz .loop
-	shl rdi, 32
-	shr eax, 8
-	or rdi, rax
+	; in: rsi: filename, ecx: length (assumed nonzero); out: rdi: key (containing the length in the bottom 2 bytes)
+	cmp ecx, 7
+	push rcx
+	jc .short
+	mov ax, [rsi + rcx - 2]
+	mov [rsp + 2], ax
+	mov edi, -1
+	call UpdateCRC
+	mov [rsp + 4], edi
+	pop rdi
+	ret
+
+.short:
+	lea rdi, [rsp + 2]
+	rep movsb
+	pop rdi
 	ret
 
 CheckDuplicateInputFilename:

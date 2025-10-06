@@ -41,6 +41,74 @@ struc inputsect
 	                    resb 2 ; padding
 endstruc
 
+struc partitiondata
+	.type:                   resb  1 ; 0 = none; 0xff = invalid; others: see derived structs
+	                         resb  3 ; padding
+	.block_table_entries:    resb  4
+	.block_table:            resb  8
+endstruc
+
+struc partitiondataMBR
+	; derives from partitiondata
+	.type:                   resb  1 ; = 1
+	.partition_count_small:  resb  1 ; 0-4 = partition count; >4: has extended partitions (bits 4-7: extended flags)
+	                         resb  2 ; padding
+	.block_table_entries:    resb  4
+	.block_table:            resb  8
+	.partition_table:        resb  8
+	; the following fields only exist if .partition_count_small > 4
+	.partition_count:        resb  4
+	.extended_count:         resb  4
+	.extended_tables:        resb  8
+	assert .type == partitiondata.type
+	assert .block_table_entries == partitiondata.block_table_entries
+	assert .block_table == partitiondata.block_table
+endstruc
+
+struc partitiondataGPT
+	; derives from partitiondata
+	.type:                   resb  1 ; = 2
+	.table_header_count:     resb  1
+	.selected_table_header:  resb  1
+	.table_header_flags:     resb  1 ; 2 bits per table (0 = nonmatching, 1 = matching, 2 = selected, 3 = invalid)
+	.block_table_entries:    resb  4
+	.block_table:            resb  8
+	.partition_table:        resb  8
+	.partition_count:        resb  4
+	.table_header_locations: resb 12 ; 3 values, 4 bytes each
+	.table_header_blocks:    resb 24 ; 3 values, 8 bytes each
+	assert .type == partitiondata.type
+	assert .block_table_entries == partitiondata.block_table_entries
+	assert .block_table == partitiondata.block_table
+endstruc
+
+struc extendedtable
+	.block:            resb 4
+	.parent:           resb 4
+	.block_high:       resb 1
+	.parent_high:      resb 1
+	.parent_entry:     resb 1 ; 0-3
+	.next:             resb 1 ; 0-3; 0xff = none
+	.location:         resb 4
+endstruc
+
+struc partitionMBR
+	.number:         resb 4
+	.length:         resb 4
+	.start:          resb 4
+	.table:          resb 4
+	.start_high:     resb 1
+	.table_high:     resb 1
+	.entry_flags:    resb 1 ; bits 0-1: entry (0-3); bit 7: bootable flag
+	.type:           resb 1
+	.table_location: resb 4
+endstruc
+
+struc partitionGPT
+	.number:   resb 4
+	.location: resb 4 ; location of the entry that describes the partition
+endstruc
+
 %assign EXECUTION_MODE_OPTIONS         14
 %assign HEADER_SIZE_DEFAULT      0x100000 ;   1 MB
 %assign HEADER_SIZE_LIMIT       0x1000000 ;  16 MB

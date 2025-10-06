@@ -9,9 +9,11 @@ AllocateCurrentBuffer:
 
 ResizeCurrentBuffer:
 	; in: esi: new size (unaligned), [zCurrentBuffer]: current buffer, [zCurrentBufferSize]: current size; same output as AllocateCurrentBuffer
+	mov rax, [zCurrentBuffer]
+	test rax, rax
+	jz AllocateCurrentBuffer
 	add esi, 0xfff
 	and esi, -0x1000
-	mov rax, [zCurrentBuffer]
 	mov edx, [zCurrentBufferSize]
 	cmp edx, esi
 	jnc .done ; if the buffer is larger, leave it alone
@@ -85,6 +87,18 @@ Abort:
 	mov eax, kill
 	syscall
 	ud2
+
+UpdateCRC:
+	; in: rsi: buffer, ecx: length; in/out: edi: partial result; only clobbers rax
+	mov eax, edi
+	mov al, byte[rsi]
+	inc rsi
+	xor eax, edi
+	shr edi, 8
+	xor edi, [4 * rax + CRCTable]
+	dec ecx
+	jnz UpdateCRC
+	ret
 
 StringLength:
 	; input: rbp: string; output: rbx: length

@@ -11,6 +11,7 @@ zCurrentFD:                resb 4
 zCurrentOutputOffset:
 zDefaultFileBlockSize:     resb 4
 zExecutionMode:
+zPartitionEntryIndex:
 zPartitionTableSizesMatch:
 zPartitionTableType:       resb 1
 zNoMoreOptions:
@@ -24,10 +25,14 @@ zCurrentFilename:
 zRealFilenames:            resb 8
 zInputBlockListPointer:    resb 8
 zRemainingInputCount:      resb 4
+zCurrentBufferOffset:
 zCurrentInputOffset:
 zCurrentInputIndex:        resb 4
 zCurrentBufferSize:        resb 4
 zCurrentBuffer:            resb 8 ; allocated buffer in memory
 zInputBlockBuffer:         resb 8 ; points to the next block, not the beginning of the buffer
+zCurrentPartitionTable:    resb 8
+zExtendedPartitionStart:   resb 4
+zExtendedPartitionSize:    resb 4
 zStatBuffer:               resb struct_stat_size
                            resb 432 - ($ - zStringBuffer)

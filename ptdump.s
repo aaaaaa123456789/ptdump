@@ -10,6 +10,7 @@
 
 	section .text align=1
 
+%include "src/crcdata.s"
 %include "src/ptypes.s"
 %include "src/cliopt.s"
 %include "src/ptlabels.s"
@@ -21,6 +22,7 @@
 %include "src/list.s"
 %include "src/load.s"
 %include "src/fileio.s"
+%include "src/loadtbl.s"
 %include "src/tables.s"
 %include "src/typetext.s"
 %include "src/misc.s"

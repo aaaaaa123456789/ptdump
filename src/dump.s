@@ -398,10 +398,7 @@ DumpPartitionTables:
 	jmp .loaded_tables
 
 .release_secondary_GPT_table:
-	mov rdi, [zCurrentBuffer]
-	mov esi, [zCurrentBufferSize]
-	mov eax, munmap
-	syscall
+	call ReleaseCurrentBuffer
 .loaded_tables:
 	mov edi, [zCurrentFD]
 	mov eax, close
@@ -515,10 +512,7 @@ DumpPartitionTables:
 	dec rbx
 	jnz .output_offset_calculation_loop
 	mov [zCurrentOutputOffset], ecx
-	mov rdi, [zCurrentBuffer]
-	mov esi, [zCurrentBufferSize]
-	mov eax, munmap
-	syscall
+	call ReleaseCurrentBuffer
 	mov r14d, [zInputCount]
 	xor r13d, r13d
 .prepare_extra_block_tables_loop:

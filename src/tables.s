@@ -81,6 +81,7 @@ LoadAllPartitionTables:
 	cmp edi, r14d
 	jc .loop
 	pop r15
+ReleaseCurrentBuffer:
 	mov rdi, [zCurrentBuffer]
 	mov esi, [zCurrentBufferSize]
 	mov eax, munmap

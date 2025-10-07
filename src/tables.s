@@ -60,27 +60,26 @@ IsExtendedPartitionCode:
 	ret
 
 LoadAllPartitionTables:
-	; in: rbp = data file contents, ebx = file table offset, r14d = file count; out: r12: pointers to partition tables
-	push r15
+	; in: rbp = data file contents, ebx = file table offset, r14d = file count; out: r15: pointers to partition tables
+	push r14
 	lea rsi, [8 * r14]
 	mov r15, rsi
 	call Allocate
-	mov r12, rax
+	push rax
 	add r15, rax
 	mov eax, 0xff8
 	and rax, r15
 	cmovz r15, rax
-	xor edi, edi
 .loop:
-	push rdi
+	lea edi, [r14d - 1]
 	call LoadPartitionTablesForFile
-	pop rdi
+	dec r14d
+	mov rdi, [rsp]
 	mov rdx, [zCurrentPartitionTable]
-	mov [r12 + 8 * rdi], rdx
-	inc edi
-	cmp edi, r14d
-	jc .loop
+	mov [rdi + 8 * r14], rdx
+	jnz .loop
 	pop r15
+	pop r14
 ReleaseCurrentBuffer:
 	mov rdi, [zCurrentBuffer]
 	mov esi, [zCurrentBufferSize]

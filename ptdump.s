@@ -10,12 +10,12 @@
 
 	section .text align=1
 
-%include "src/crcdata.s"
-%include "src/ptypes.s"
-%include "src/cliopt.s"
-%include "src/ptlabels.s"
-%include "src/strings.s"
-; data above this line; code below this line
+%include "data/crc.s"
+%include "data/ptypes.s"
+%include "data/cliopt.s"
+%include "data/ptlabels.s"
+%include "data/strings.s"
+
 %include "src/main.s"
 %include "src/dump.s"
 %include "src/dumpsect.s"

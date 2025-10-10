@@ -250,8 +250,8 @@ LoadEffectiveBlockList:
 	lea r9, [rbp + rbx - 16]
 	mov r8, rbp
 	cmp rbp, r9
-	jz .done
 	mov edx, [zCurrentBlockSize]
+	jz .done
 .deduplication_loop:
 	mov eax, [rbp + 8]
 	add rax, [rbp]

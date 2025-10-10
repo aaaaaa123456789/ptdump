@@ -195,12 +195,12 @@ PartitionsMode:
 	call GetSizeString ; will always be kilobytes!
 	mov ecx, 9
 	cmp al, " "
-	jz .done_skipping_spaces
+	jnz .done_skipping_spaces
 .skipping_spaces_loop:
 	shr eax, 8
 	dec ecx
 	cmp al, " "
-	jnz .skipping_spaces_loop
+	jz .skipping_spaces_loop
 .done_skipping_spaces:
 	mov [r12], eax
 	add r12, rcx

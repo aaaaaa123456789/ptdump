@@ -42,13 +42,13 @@ ListContentsMode:
 ListBlocksMode:
 	endbr64
 	call RejectSizeArguments
-	cmp dword[zInputCount], 0
+	mov r12d, [zInputCount]
+	test r12d, r12d
 	jz .skip_duplicate_check
 	call CheckDuplicateInputFilename
 .skip_duplicate_check:
 	call OpenValidateDataFile
 	call CheckOpenStandardOutput
-	mov r12d, [zInputCount]
 	test r12d, r12d
 	jnz .specific_filenames
 	mov [zCurrentInputOffset], ebx

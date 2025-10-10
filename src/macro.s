@@ -63,3 +63,5 @@
 		rep movsq
 	%endif
 %endmacro
+
+%idefine countedstring(string) (%strlen(string) + ((string) << 8))

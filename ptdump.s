@@ -12,6 +12,7 @@
 
 %include "data/crc.s"
 %include "data/ptypes.s"
+%include "data/digits.s"
 %include "data/cliopt.s"
 %include "data/ptlabels.s"
 %include "data/strings.s"
@@ -20,6 +21,7 @@
 %include "src/dump.s"
 %include "src/dumpsect.s"
 %include "src/list.s"
+%include "src/partlist.s"
 %include "src/load.s"
 %include "src/fileio.s"
 %include "src/loadtbl.s"

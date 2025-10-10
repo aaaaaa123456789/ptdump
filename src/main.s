@@ -7,7 +7,7 @@ _start:
 	cmp rax, -EBADF
 	jnz Main
 	; no stderr available; try to open /dev/null as stderr and make sure it's the null device
-	mov edi, FilenameStrings.dev_null
+	mov edi, MiscStrings.dev_null
 	assert O_RDONLY == 0
 	xor esi, esi
 	mov eax, open

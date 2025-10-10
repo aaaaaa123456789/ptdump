@@ -38,9 +38,11 @@ Messages:
 .unknown_option_error:            withend db "error: unknown option: "
 .unknown_partition_table:         withend db "error: unknown partition table type for "
 
-FilenameStrings:
+MiscStrings:
 .dev_null: db "/dev/null", 0
 .stdin: withend db "<standard input>", 0
+.size_suffixes: db "BkMGTPEZY" ; the last few are only there to catch invalid sizes in tables
+.unknown_type: withend db "unknown type 0x"
 
 TableHeaders: withend db `           block#    count  bsize      offset filename\n`
 .one_file:    withend db `           block#    count  bsize      offset\n`
@@ -48,6 +50,7 @@ TableHeaders: withend db `           block#    count  bsize      offset filename
 Headers:
 .MBR_types: withend db `MBR partition types:\n`
 .GPT_types: withend db `\nGPT partition types:\n`
+.partition_list: withend db " partition table, block size: "
 
 ProgramInformation:
 	; version information first; will be printed on its own by -v/--version

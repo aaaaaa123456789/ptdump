@@ -203,7 +203,7 @@ LoadPartitionTablesForFile:
 	sub rax, [rdx]
 	mov ecx, [rdx + 8]
 	jz .selected_GPT_table_at_start
-	sub ecx, edi
+	sub ecx, eax
 	imul eax, r9d
 .selected_GPT_table_at_start:
 	add eax, [rdx + 12]
@@ -260,6 +260,7 @@ LoadPartitionTablesForFile:
 	pop rcx
 .allocated_GPT_partition_table:
 	mov rdi, rax
+	add rax, rcx
 	add rax, r15
 	test ax, 0xff8
 	cmovnz r15, rax

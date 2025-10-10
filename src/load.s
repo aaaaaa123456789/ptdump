@@ -101,9 +101,9 @@ OpenValidateInputDataFile:
 	test r15, r15
 	cmovz r15, rbp
 	jnz .no_copy_stdin_filename
-	mov esi, FilenameStrings.stdin
+	mov esi, MiscStrings.stdin
 	mov edi, zStringBuffer
-	copybytes FilenameStrings.stdin_end - FilenameStrings.stdin
+	copybytes MiscStrings.stdin_end - MiscStrings.stdin
 .no_copy_stdin_filename:
 	mov ebp, Messages.data_file_not_valid
 	mov ebx, Messages.data_file_not_valid_end - Messages.data_file_not_valid
@@ -412,7 +412,7 @@ LoadFilenameTable:
 .duplicate:
 	mov r12, rax
 	movzx r13d, r11w
-	mov ebp, FilenameStrings.stdin
+	mov ebp, MiscStrings.stdin
 	test r15, r15
 	cmovnz rbp, r15
 	mov r15, rbp

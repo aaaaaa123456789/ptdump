@@ -110,6 +110,18 @@ StringLength:
 	sub rbx, rbp
 	ret
 
+NumberLength:
+	; input: rax: number (preserved); output: ecx: number of digits; preserves all other registers
+	bsr rcx, rax
+	cmovz ecx, eax
+	movzx ecx, byte[ecx + DigitLengths.lengths]
+	shr ecx, 1
+	jnc .done
+	cmp [8 * ecx + DigitLengths.thresholds - 8], rax
+	adc ecx, 0
+.done:
+	ret
+
 PrintNumber:
 	; input: rax: number, rdi: buffer, ecx: length; preserves rdi
 	mov esi, 10

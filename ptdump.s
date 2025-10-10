@@ -26,6 +26,7 @@
 %include "src/fileio.s"
 %include "src/loadtbl.s"
 %include "src/tables.s"
+%include "src/filename.s"
 %include "src/typetext.s"
 %include "src/misc.s"
 %include "src/sort.s"

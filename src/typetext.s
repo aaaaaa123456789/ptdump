@@ -1,6 +1,6 @@
 ShowPartitionTypesMode:
 	endbr64
-	mov esi, 0x7000
+	mov esi, PARTITION_TYPE_LIST_MAX_SIZE
 	call AllocateAligned
 	mov rbp, rax
 	mov rdi, rax

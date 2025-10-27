@@ -207,6 +207,8 @@ Main:
 	mov rbp, r14
 	call StringLength
 	mov rbp, r14
+	mov byte[rbp + rbx], `\n`
+	inc rbx
 	jmp BadInvocationExit
 
 .next_long_option:

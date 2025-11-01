@@ -38,6 +38,40 @@ Messages:
 .unknown_option_error:            withend db "error: unknown option: "
 .unknown_partition_table:         withend db "error: unknown partition table type for "
 
+JSONText:
+.attributes:          withend db '","attributes":'
+.block_size:          withend db '","block_size":'
+.blocks_bracket:      withend db ',"blocks":['
+.entry_bootable:      db ',"entry":1' ; out of order because it continues in the next entry
+.bootable:            withend db ',"bootable":'
+.brace_block:         withend db '{"block":'
+.brace_filename:      withend db '{"filename":'
+.brace_header:        withend db '{"header":'
+.brace_number:        withend db '{"number":'
+.bracket_status:      withend db '],"status":'
+.count:               withend db ',"count":'
+.diskID_quote:        withend db ',"diskID":"'
+.effective_blocks:    withend db ',"effective_blocks":['
+.endCHS:              withend db '],"endCHS":['
+.entries:             withend db ',"entries":'
+.entry_size:          withend db ',"entry_size":'
+.entry_one_brace:     withend db ',"entry":1},'
+.extended_tables:     withend db ',"extended_partition_tables":['
+.first_block:         withend db '","first_block":'
+.last_block:          withend db ',"last_block":'
+.length:              withend db ',"length":'
+.offset:              withend db ',"offset":'
+.parent:              withend db ',"parent":'
+.partition_tables:    withend db ',"partition_tables":['
+.partition_type:      withend db ',"partition_type":"'
+.partitions_brackets: withend db '],"partitions":[]'
+.quote_type:          withend db '","type":"'
+.required:            withend db ',"required":'
+.start:               withend db ',"start":'
+.startCHS:            withend db ',"startCHS":['
+.table:               withend db ',"table":'
+.typeID_quote:        withend db ',"typeID":"'
+
 MiscStrings:
 .dev_null: db "/dev/null", 0
 .stdin: withend db "<standard input>", 0
@@ -118,6 +152,13 @@ ProgramInformation:
 	db `\tGenerate output like that of sfdisk -d for each disk in a data file.\n`
 	db `\tIf filename arguments are specified, only the selected disks'\n`
 	db `\tpartition tables will be shown.\n`
+	db "-j, --"
+.json: withend db "json"
+	db `:\n`
+	db `\tGenerate a JSON document (minified, terminated by a newline) describing\n`
+	db `\tthe contents of a data file. (A JSON Schema file for this document is\n`
+	db `\tavailable in the project's repository.) Filename arguments are not\n`
+	db `\tallowed for this mode.\n`
 	db "-r, --"
 .restore: withend db "restore"
 	db `:\n`

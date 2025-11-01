@@ -26,15 +26,19 @@ zGenericDataBuffer:        resb 8
 zCurrentFilename:
 zRealFilenames:            resb 8
 zInputBlockListPointer:    resb 8
+zRemainingEntries:
 zRemainingInputCount:      resb 4
 zCurrentBufferOffset:
 zCurrentInputOffset:
 zCurrentInputIndex:        resb 4
 zCurrentBufferSize:        resb 4
 zCurrentBuffer:            resb 8 ; allocated buffer in memory
+zCurrentBlockNumber:
 zInputBlockBuffer:         resb 8 ; points to the next block, not the beginning of the buffer
 zCurrentPartitionTable:    resb 8
+zCurrentBlockCount:
 zExtendedPartitionStart:   resb 4
+zCurrentBlockLocation:
 zExtendedPartitionSize:    resb 4
 zStatBuffer:               resb struct_stat_size
                            resb 432 - ($ - zStringBuffer)

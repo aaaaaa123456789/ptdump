@@ -26,8 +26,7 @@ ShowPartitionTypesMode:
 	mov rbx, -2 * GPT_PARTITION_TYPES
 .loopGPT:
 	lea rsi, [8 * rbx + PartitionTypesGPT.GUIDs + 16 * GPT_PARTITION_TYPES]
-	call LoadGUID
-	call RenderGUID
+	call LoadRenderGUID
 	mov byte[rdi + 36], `\t`
 	add rdi, 37
 	movzx esi, word[rbx + PartitionTypesGPT.labels + 2 * GPT_PARTITION_TYPES]
@@ -41,7 +40,7 @@ ShowPartitionTypesMode:
 	jmp WriteStandardOutputExit
 
 GetGPTPartitionTypeString:
-	; in: xmm7: loaded GUID, rdi: output address; out: rdi: end of string
+	; in: xmm7: loaded GUID, rdi: output address; out: rdi: end of string, zero flag: empty output
 	mov eax, 0x80808080
 	xor r8d, r8d
 	mov r11d, (GPT_PARTITION_TYPES - 1) * 2
@@ -91,6 +90,7 @@ GetGPTPartitionTypeString:
 
 GetPartitionTypeString:
 	; in: esi: offset into PartitionTypeLabels, rdi: output address; out: rdi: end of string
+	; always returns the zero flag cleared (important for GetMBRPartitionTypeString and GetGPTPartitionTypeString)
 	add esi, PartitionTypeLabels
 	lodsb
 	cmp al, MULTIPLE_LABEL_CODE + 2
@@ -116,7 +116,7 @@ GetPartitionTypeString:
 	ret
 
 GetMBRPartitionTypeString:
-	; in: eax: partition type, rdi: output address; out: rdi: end of string
+	; in: eax: partition type, rdi: output address; out: rdi: end of string, zero flag: empty output
 	movzx esi, word[rax + rax + PartitionTypesMBR]
 	test esi, esi
 	jnz GetPartitionTypeString
@@ -129,6 +129,9 @@ GetMBRPartitionTypeString:
 .done:
 	ret
 
+LoadRenderGUID:
+	; in: rsi: pointer to GUID, rdi: output address; clobbers rax, r9, xmm0-xmm5
+	call LoadGUID
 RenderGUID:
 	; in: xmm0: GUID to render, rdi: output address; clobbers rax, xmm0-xmm5
 	mov eax, 0x300f0a07

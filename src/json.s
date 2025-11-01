@@ -87,15 +87,15 @@ JSONMode:
 	test cl, cl
 	jnz .UTF8_continuation_loop
 	mov cl, ch
-	shl ch, 2
+	shl cl, 2
 	add cl, ch
 	mov eax, 2
 	shl eax, cl
 	cmp edx, eax
 	cmc
-	sbb ch, ch
-	and cl, ch
-	movzx eax, cl
+	sbb cl, cl
+	and ch, cl
+	movzx eax, ch
 	pop rcx
 	jz .invalid_UTF8
 	sub ecx, eax

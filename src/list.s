@@ -42,13 +42,13 @@ ListContentsMode:
 ListBlocksMode:
 	endbr64
 	call RejectSizeArguments
-	mov r12d, [zInputCount]
-	test r12d, r12d
+	cmp dword[zInputCount],0
 	jz .skip_duplicate_check
 	call CheckDuplicateInputFilename
 .skip_duplicate_check:
 	call OpenValidateDataFile
 	call CheckOpenStandardOutput
+	mov r12d, [zInputCount]
 	test r12d, r12d
 	jnz .specific_filenames
 	mov [zCurrentInputOffset], ebx
@@ -58,6 +58,7 @@ ListBlocksMode:
 	call .write
 	pop rbp
 .all_files_loop:
+	mov ebx, [zCurrentInputOffset]
 	call .print_file_data
 	add dword[zCurrentInputOffset], 3
 	dec r14d
@@ -88,10 +89,9 @@ ListBlocksMode:
 	pop rbp
 	xor r12d, r12d
 .specific_files_loop:
-	mov eax, [r15 + 8 * r12]
-	lea eax, [eax + 2 * eax]
-	add eax, r13d
-	mov [zCurrentInputOffset], eax
+	mov ebx, [r15 + 8 * r12]
+	lea ebx, [ebx + 2 * ebx]
+	add ebx, r13d
 	call .print_file_data
 	inc r12d
 	cmp r12d, [zInputCount]
@@ -100,8 +100,7 @@ ListBlocksMode:
 	jmp ExitProgram
 
 .print_file_data:
-	; cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
-	mov ebx, [zCurrentInputOffset]
+	; in: ebx: input offset; cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
 	movzx eax, word[rbp + 4 * rbx + 6]
 	shl eax, 2
 	mov ecx, 0x40000

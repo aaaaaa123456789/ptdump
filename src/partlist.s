@@ -1,12 +1,12 @@
 PartitionsMode:
 	endbr64
 	call RejectSizeArguments
-	mov r12d, [zInputCount]
-	test r12d, r12d
+	cmp dword[zInputCount], 0
 	jz .skip_duplicate_check
 	call CheckDuplicateInputFilename
 .skip_duplicate_check:
 	call OpenValidateDataFile
+	mov r12d, [zInputCount]
 	mov byte[zFallbackPartitionTypes], 1
 	test r12d, r12d
 	jnz .specific_filenames

@@ -316,9 +316,10 @@ JSONMode:
 	mov esi, JSONText.partitions_brackets
 	copybytes JSONText.partitions_brackets_end - JSONText.partitions_brackets
 
-	mov r11d, [r10 + partitiondataGPT.partition_count]
-	test r11d, r11d
+	mov eax, [r10 + partitiondataGPT.partition_count]
+	test eax, eax
 	jz .next_file
+	mov [zRemainingEntries], eax
 	dec rdi
 	mov r10, [r10 + partitiondataGPT.partition_table]
 .GPT_partition_loop:
@@ -428,10 +429,9 @@ JSONMode:
 	mov ax, "},"
 	stosw
 	add r10, partitionGPT_size
-	dec r11d
+	dec dword[zRemainingEntries]
 	jnz .GPT_partition_loop
-	mov byte[rdi - 1], "]"
-	jmp .next_file
+	jmp .next_file_add_bracket
 
 .MBR:
 	lea rax, [rdi + 52]
@@ -557,6 +557,7 @@ JSONMode:
 	add r10, partitionMBR_size
 	dec dword[zRemainingEntries]
 	jnz .MBR_partition_loop
+.next_file_add_bracket:
 	mov byte[rdi - 1], "]"
 
 .next_file:

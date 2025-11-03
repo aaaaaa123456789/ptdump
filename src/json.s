@@ -306,7 +306,7 @@ JSONMode:
 	mov eax, 'ng":'
 	stosd
 	mov al, cl
-	call .print_tristate
+	call .print_table_status
 	mov ax, "},"
 	stosw
 	inc r11d
@@ -381,6 +381,13 @@ JSONMode:
 	jc .escaped_GPT_partition_label_character
 	cmp ax, 0x7f
 	jnc .escaped_GPT_partition_label_character
+	stosb
+	cmp al, '\'
+	jz .repeat_GPT_partition_label_character
+	cmp al, '"'
+	jnz .next_GPT_partition_label_character
+	mov byte[rdi - 1], '\'
+.repeat_GPT_partition_label_character:
 	stosb
 	jmp .next_GPT_partition_label_character
 .escaped_GPT_partition_label_character:
@@ -696,8 +703,10 @@ JSONMode:
 	add rdi, r8
 	ret
 
-.print_tristate:
-	; al = 0, 1, 2 for false, true, null
+.print_table_status:
+	; al = 0, 1, 2 for false, true, null; 3 (invalid table) counts as false
+	cmp al, 3
+	jz .print_boolean
 	mov rdx, countedstring("null")
 	cmp al, 2
 	cmovz rax, rdx

@@ -148,6 +148,7 @@ LoadPartitionTablesForFile:
 	mov [rdx + 4 * rsi + partitiondataGPT.table_header_locations - 4], ecx
 	shr rcx, 32
 	and cl, 3
+	shl al, 2
 	or al, cl
 	dec esi
 	jnz .load_tables_from_stack_loop

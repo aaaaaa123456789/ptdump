@@ -124,7 +124,7 @@ ProgramInformation:
 	db `\tranges are separated by a hyphen (e.g., 40-50) and inclusive on both\n`
 	db `\tends. An alternate filename can be specified after the list after a\n`
 	db `\tcolon (e.g., 40,50-60,70,80-90:filename.bin).\n`
-	db "-l, --"
+	db "-n, --"
 .list_contents: withend db "list-contents"
 	db `:\n`
 	db `\tList the contents of a data file (filenames only). Filename arguments\n`
@@ -134,12 +134,19 @@ ProgramInformation:
 	db `:\n`
 	db `\tLike the previous mode, but filenames are separated by null bytes\n`
 	db `\tinstead of newlines (as expected by xargs -0 and similar tools).\n`
-	db "-t, --"
+	db "-l, --"
 .list_blocks: withend db "list-blocks"
 	db `:\n`
 	db `\tList the contents of a data file (filenames and blocks for each file).\n`
 	db `\tIf filename arguments are specified, only the selected disks'\n`
 	db `\tinformation will be shown.\n`
+	db "-L, --"
+.list_effective_blocks: withend db "list-effective-blocks"
+	db `:\n`
+	db `\tLike the previous mode, but after deduplicating blocks and merging\n`
+	db `\tconsecutive block ranges. This mode lists the effective blocks for\n`
+	db `\teach file, i.e., the block data that the program will use for other\n`
+	db `\tmodes. (Like for the previous mode, filename arguments will filter.)\n`
 	db "-p, --"
 .partitions: withend db "partitions"
 	db `:\n`

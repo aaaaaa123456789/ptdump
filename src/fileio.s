@@ -199,6 +199,25 @@ WriteData:
 .done:
 	ret
 
+WriteCurrentBuffer:
+	mov ebx, [zCurrentOutputOffset]
+	test ebx, ebx
+	jz .done
+	push rbp
+	mov rbp, [zCurrentBuffer]
+	call WriteDataOrFail
+	pop rbp
+.done:
+	ret
+
+WriteDataOrFail:
+	call WriteData
+	test rax, rax
+	mov ebp, Messages.output_error
+	mov ebx, Messages.output_error_end - Messages.output_error
+	jnz ErrorExit
+	ret
+
 OpenInputDevice:
 	; in: r15: input filename; out: [zCurrentFD]: FD, ebx: logical block size, rax: block count; preserves r15
 	mov rdi, r15

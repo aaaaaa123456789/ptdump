@@ -41,6 +41,10 @@ ListContentsMode:
 
 ListBlocksMode:
 	endbr64
+	push ListBlocksForFile
+	; fallthrough
+
+ListBlocks:
 	call RejectSizeArguments
 	cmp dword[zInputCount],0
 	jz .skip_duplicate_check
@@ -55,11 +59,12 @@ ListBlocksMode:
 	push rbp
 	mov ebp, TableHeaders
 	mov ebx, TableHeaders.end - TableHeaders
-	call .write
+	call WriteDataOrFail
 	pop rbp
+	pop r13
 .all_files_loop:
 	mov ebx, [zCurrentInputOffset]
-	call .print_file_data
+	call r13
 	add dword[zCurrentInputOffset], 3
 	dec r14d
 	jnz .all_files_loop
@@ -76,7 +81,7 @@ ListBlocksMode:
 	mov [r15 + 8 * r12], eax
 	test r12d, r12d
 	jnz .filename_loop
-	mov r13d, ebx
+	mov [zCurrentInputOffset], ebx
 	push rbp
 	cmp dword[zInputCount], 1
 	mov ebp, TableHeaders
@@ -85,26 +90,29 @@ ListBlocksMode:
 	mov ebx, TableHeaders.end - TableHeaders
 	mov eax, TableHeaders.one_file_end - TableHeaders.one_file
 	cmovz ebx, eax
-	call .write
+	call WriteDataOrFail
 	pop rbp
+	pop r13
 	xor r12d, r12d
 .specific_files_loop:
 	mov ebx, [r15 + 8 * r12]
 	lea ebx, [ebx + 2 * ebx]
-	add ebx, r13d
-	call .print_file_data
+	add ebx, [zCurrentInputOffset]
+	call r13
 	inc r12d
 	cmp r12d, [zInputCount]
 	jc .specific_files_loop
 	xor edi, edi
 	jmp ExitProgram
 
-.print_file_data:
-	; in: ebx: input offset; cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
+ListBlocksForFile:
+	; in: ebx: input offset
+	endbr64
+	; cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
 	movzx eax, word[rbp + 4 * rbx + 6]
+	dec ax
+	inc eax
 	shl eax, 2
-	mov ecx, 0x40000
-	cmovz eax, ecx
 	mov [zCurrentBlockSize], eax
 	mov ecx, 6
 	mov edi, zGenericDataBuffer + 1
@@ -128,7 +136,7 @@ ListBlocksMode:
 	test al, al
 	jnz .sequence_block
 	shr eax, 8
-	jz .write_buffer
+	jz WriteCurrentBuffer
 	mov [zTempValue], eax
 	movzx esi, word[zFilenameLength]
 	cmp esi, 1
@@ -163,7 +171,7 @@ ListBlocksMode:
 	cmp edi, MAXIMUM_BUFFERED_OUTPUT
 	jc .block_loop
 	push rbx
-	call .write_buffer
+	call WriteCurrentBuffer
 	pop rbx
 	jmp .restart_output
 
@@ -226,23 +234,4 @@ ListBlocksMode:
 	jc PrintNumber
 	mov al, "*"
 	rep stosb
-	ret
-
-.write_buffer:
-	mov ebx, [zCurrentOutputOffset]
-	test ebx, ebx
-	jz .done
-	push rbp
-	mov rbp, [zCurrentBuffer]
-	call .write
-	pop rbp
-.done:
-	ret
-
-.write:
-	call WriteData
-	test rax, rax
-	mov ebp, Messages.output_error
-	mov ebx, Messages.output_error_end - Messages.output_error
-	jnz ErrorExit
 	ret

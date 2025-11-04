@@ -5,6 +5,7 @@ ExecutionModeFunctions:
 	dd ListContentsMode
 	dd ListContentsZeroMode
 	dd ListBlocksMode
+	dd 0 ; ...
 	dd PartitionsMode
 	dd 0 ; ...
 	dd JSONMode
@@ -26,6 +27,7 @@ OptionTables:
 	dd ProgramInformation.list_contents
 	dd ProgramInformation.list_contents_0
 	dd ProgramInformation.list_blocks
+	dd ProgramInformation.list_effective_blocks
 	dd ProgramInformation.partitions
 	dd ProgramInformation.sfdisk
 	dd ProgramInformation.json
@@ -42,7 +44,7 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "mDl0tpkjrcexTvhdbs"
+	db "mDn0lLpkjrcexTvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
 	db ProgramInformation.map_end - ProgramInformation.map
@@ -50,6 +52,7 @@ OptionTables:
 	db ProgramInformation.list_contents_end - ProgramInformation.list_contents
 	db ProgramInformation.list_contents_0_end - ProgramInformation.list_contents_0
 	db ProgramInformation.list_blocks_end - ProgramInformation.list_blocks
+	db ProgramInformation.list_effective_blocks_end - ProgramInformation.list_effective_blocks
 	db ProgramInformation.partitions_end - ProgramInformation.partitions
 	db ProgramInformation.sfdisk_end - ProgramInformation.sfdisk
 	db ProgramInformation.json_end - ProgramInformation.json

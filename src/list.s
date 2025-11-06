@@ -39,6 +39,11 @@ ListContentsMode:
 	mov rbx, rdi
 	jmp WriteStandardOutputExit
 
+ListEffectiveBlocksMode:
+	endbr64
+	push ListEffectiveBlocksForFile
+	jmp ListBlocks
+
 ListBlocksMode:
 	endbr64
 	push ListBlocksForFile
@@ -108,25 +113,7 @@ ListBlocks:
 ListBlocksForFile:
 	; in: ebx: input offset
 	endbr64
-	; cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
-	movzx eax, word[rbp + 4 * rbx + 6]
-	dec ax
-	inc eax
-	shl eax, 2
-	mov [zCurrentBlockSize], eax
-	mov ecx, 6
-	mov edi, zGenericDataBuffer + 1
-	call PrintNumber
-	mov al, " "
-	mov [zGenericDataBuffer], al
-	mov [zGenericDataBuffer + 7], al
-	mov eax, [rbp + 4 * rbx]
-	lea rax, [rbp + 4 * rax]
-	mov [zCurrentFilename], rax
-	xor eax, eax
-	cmp dword[zInputCount], 1
-	cmovnz ax, [rbp + 4 * rbx + 4]
-	mov [zFilenameLength], ax
+	call PrepareFixedBlockListColumnsForFile
 	mov ebx, [rbp + 4 * rbx + 8]
 	lea rbx, [rbp + 4 * rbx]
 .restart_output:
@@ -137,34 +124,14 @@ ListBlocksForFile:
 	jnz .sequence_block
 	shr eax, 8
 	jz WriteCurrentBuffer
-	mov [zTempValue], eax
-	movzx esi, word[zFilenameLength]
-	cmp esi, 1
-	sbb esi, -47
-	add esi, [zCurrentOutputOffset]
-	call ResizeCurrentBuffer
-	mov edi, [zCurrentOutputOffset]
-	add rdi, [zCurrentBuffer]
-	mov rax, [rbx + 8]
-	call .write_location_and_layout
-	add rdi, 18
-	mov eax, [zTempValue]
-	mov ecx, 8
-	call PrintNumber
+	mov [zCurrentBlockCount], eax
+	mov eax, 1
+	call ExtendBlockListBuffer
 	mov eax, [rbx + 4]
-	shl rax, 2
-	add rdi, 16
-	mov ecx, 11
-	call PrintNumber
-	add rdi, 12
+	mov rdx, [rbx + 8]
+	mov [zCurrentBlockLocation], eax
 	add rbx, 16
-	cmp dword[zInputCount], 1
-	jz .next_block
-	mov rsi, [zCurrentFilename]
-	movzx ecx, word[zFilenameLength]
-	rep movsb
-	mov al, `\n`
-	stosb
+	call WriteBlockListEntry
 .next_block:
 	sub rdi, [zCurrentBuffer]
 	mov [zCurrentOutputOffset], edi
@@ -178,6 +145,88 @@ ListBlocksForFile:
 .sequence_block:
 	mov [zTempValue], al
 	movzx eax, al
+	call ExtendBlockListBuffer
+	mov r10d, [rbx]
+	shr r10d, 8
+	shl r10, 32
+	mov eax, [rbx + 4]
+	add rbx, 8
+	mov dword[zCurrentBlockCount], 1
+	mov [zCurrentBlockLocation], eax
+.sequence_loop:
+	mov edx, [rbx]
+	add rbx, 4
+	add rdx, r10
+	mov r10, rdx
+	call WriteBlockListEntry
+	mov eax, [zCurrentBlockSize]
+	add [zCurrentBlockLocation], eax
+	dec byte[zTempValue]
+	jnz .sequence_loop
+	jmp .next_block
+
+ListEffectiveBlocksForFile:
+	; in: ebx: input offset
+	endbr64
+	call PrepareFixedBlockListColumnsForFile
+	push r15
+	mov edi, ebx
+	xor r15d, r15d
+	mov [zCurrentOutputOffset], r15d
+	call LoadEffectiveBlockListForOffset
+	mov [zInputBlockListPointer], rsi
+	mov r15, rsi
+	mov eax, edi
+	mov [zTempValue], edi
+	call ExtendBlockListBuffer
+.block_loop:
+	mov rdx, [r15 + 8]
+	assert zCurrentBlockLocation - zCurrentBlockCount == 4
+	mov [zCurrentBlockCount], rdx
+	mov rdx, [r15]
+	call WriteBlockListEntry
+	add r15, 16
+	dec dword[zTempValue]
+	jnz .block_loop
+	mov rbx, rdi
+	mov rsi, r15
+	mov r15, rbp
+	mov rdi, [zInputBlockListPointer]
+	sub rsi, rdi
+	add rsi, 0xfff
+	and rsi, -0x1000
+	mov eax, munmap
+	syscall
+	mov rbp, [zCurrentBuffer]
+	sub rbx, rbp
+	call WriteDataOrFail
+	mov rbp, r15
+	pop r15
+	ret
+
+PrepareFixedBlockListColumnsForFile:
+	; in: rbp: data file buffer, ebx: file table entry location
+	mov eax, [rbp + 4 * rbx]
+	lea rax, [rbp + 4 * rax]
+	mov [zCurrentFilename], rax
+	xor eax, eax
+	cmp dword[zInputCount], 1
+	cmovnz ax, [rbp + 4 * rbx + 4]
+	mov [zFilenameLength], ax
+	mov edi, zGenericDataBuffer + 1
+	mov al, " "
+	mov [rdi - 1], al
+	mov [rdi + 6], al
+	movzx eax, word[rbp + 4 * rbx + 6]
+	dec ax
+	inc eax
+	mov [zCurrentBlockSize], eax
+	shl eax, 2
+	mov ecx, 6
+	jmp PrintNumber
+
+ExtendBlockListBuffer:
+	; in: eax: number of entries
 	movzx esi, word[zFilenameLength]
 	cmp esi, 1
 	sbb esi, -47
@@ -186,52 +235,50 @@ ListBlocksForFile:
 	call ResizeCurrentBuffer
 	mov edi, [zCurrentOutputOffset]
 	add rdi, [zCurrentBuffer]
-	mov r10d, [rbx]
-	shr r10d, 8
-	shl r10, 32
-	mov r9d, [rbx + 4]
-	shl r9, 2
-	add rbx, 8
-.sequence_loop:
-	mov eax, [rbx]
-	add rbx, 4
-	add rax, r10
-	mov r10, rax
-	call .write_location_and_layout
-	mov rax, "       1"
-	mov [rdi + 18], rax
-	mov rax, r9
-	add rdi, 34
-	mov ecx, 11
-	call PrintNumber
-	add rdi, 12
-	mov eax, [zCurrentBlockSize]
-	add r9, rax
-	cmp dword[zInputCount], 1
-	jz .skip_filename
-	mov rsi, [zCurrentFilename]
-	movzx ecx, word[zFilenameLength]
-	rep movsb
-	mov al, `\n`
-	stosb
-.skip_filename:
-	dec byte[zTempValue]
-	jnz .sequence_loop
-	jmp .next_block
+	ret
 
-.write_location_and_layout:
+WriteBlockListEntry:
+	; in: rdx: block number; [zCurrentBlockCount] and [zCurrentBlockLocation] set; [zGenericDataBuffer] containing the block size with spaces around it;
+	; ... [zCurrentFilename] and [zFilenameLength] set (to zero if no filename should be printed); in/out: rdi: output location
+	; layout: cols 0-16: block number, 18-25: count, 27-32: block size, 34-44: offset, 46+: filename
+	mov al, "*"
+	mov ecx, 26
+	rep stosb
 	mov rcx, [zGenericDataBuffer]
-	mov [rdi + 26], rcx
-	mov [rdi + 17], cl
+	mov [rdi], rcx
+	mov [rdi - 9], cl
+	sub rdi, 26
 	cmp dword[zInputCount], 1
 	jnz .keep_space
 	mov cl, `\n`
 .keep_space:
 	mov [rdi + 45], cl
 	mov rcx, 100000000000000000
-	cmp rax, rcx
+	cmp rdx, rcx
+	jnc .block_number_overflow
+	mov rax, rdx
 	mov ecx, 17
-	jc PrintNumber
-	mov al, "*"
-	rep stosb
+	call PrintNumber
+.block_number_overflow:
+	add rdi, 18
+	mov eax, [zCurrentBlockCount]
+	cmp eax, 100000000
+	jnc .block_count_overflow
+	mov ecx, 8
+	call PrintNumber
+.block_count_overflow:
+	add rdi, 16
+	mov eax, [zCurrentBlockLocation]
+	shl rax, 2
+	mov ecx, 11
+	call PrintNumber
+	add rdi, 12
+	cmp dword[zInputCount], 1
+	jz .no_filename
+	mov rsi, [zCurrentFilename]
+	movzx ecx, word[zFilenameLength]
+	rep movsb
+	mov al, `\n`
+	stosb
+.no_filename:
 	ret

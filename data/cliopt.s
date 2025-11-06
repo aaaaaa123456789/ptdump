@@ -5,7 +5,7 @@ ExecutionModeFunctions:
 	dd ListContentsMode
 	dd ListContentsZeroMode
 	dd ListBlocksMode
-	dd 0 ; ...
+	dd ListEffectiveBlocksMode
 	dd PartitionsMode
 	dd 0 ; ...
 	dd JSONMode

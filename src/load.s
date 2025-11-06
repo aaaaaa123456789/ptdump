@@ -133,18 +133,20 @@ OpenValidateInputDataFile:
 	ret
 
 LoadEffectiveBlockList:
-	; in: OpenValidateDataFile's outputs, edi = index; in/out: r15: common buffer or null; out: rsi = table (block number, count, location), edi = count
+	; in: OpenValidateDataFile's outputs, edi: index; in/out: r15: common buffer or null; out: rsi: table (block number, count, location), edi: count
 	; also sets [zCurrentBlockSize] to the logical file's block size
+	lea edi, [edi + 2 * edi]
+	add edi, ebx
+LoadEffectiveBlockListForOffset:
+	; in: rbp: data file buffer, edi: offset, r15: common buffer or null; same outputs as above
 	push rbx
 	push rbp
-	lea edi, [edi + 2 * edi]
-	add ebx, edi
-	mov ax, [rbp + 4 * rbx + 6]
+	mov ebx, edi
+	movzx eax, word[rbp + 4 * rdi + 6]
 	dec ax
-	movzx eax, ax
 	inc eax
 	mov [zCurrentBlockSize], eax
-	mov esi, [rbp + 4 * rbx + 8]
+	mov esi, [rbp + 4 * rdi + 8]
 	mov ebx, esi
 	xor ecx, ecx
 .counting_loop:

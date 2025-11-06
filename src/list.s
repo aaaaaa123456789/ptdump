@@ -14,7 +14,7 @@ ListContentsMode:
 	call RejectSizeArguments
 	call OpenValidateDataFile
 	mov esi, r14d
-	lea ecx, [esi + 2 * esi - 2]
+	lea ecx, [rsi + 2 * rsi - 2]
 	lea rdx, [rbp + 4 * rbx]
 .sum_loop:
 	movzx eax, word[rdx + 4 * rcx]
@@ -101,7 +101,7 @@ ListBlocks:
 	xor r12d, r12d
 .specific_files_loop:
 	mov ebx, [r15 + 8 * r12]
-	lea ebx, [ebx + 2 * ebx]
+	lea ebx, [rbx + 2 * rbx]
 	add ebx, [zCurrentInputOffset]
 	call r13
 	inc r12d

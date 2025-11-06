@@ -13,7 +13,7 @@ PartitionsMode:
 	call LoadAllPartitionTables
 	xor esi, esi
 	lea rdi, [rbp + 4 * rbx]
-	lea edx, [r14d + 2 * r14d - 2]
+	lea edx, [r14 + 2 * r14 - 2]
 .sum_all_filename_lengths_loop:
 	movzx eax, word[rdi + 4 * rdx]
 	add rsi, rax
@@ -378,7 +378,7 @@ LoadPartitionTablesForFilenames:
 	mov rsi, [r15 + 8 * r12 - 8]
 	call FindFilenameInTable
 	mov [r15 + 8 * r12 - 8], eax
-	lea eax, [eax + 2 * eax]
+	lea eax, [rax + 2 * rax]
 	add eax, ebx
 	mov [r15 + 8 * r12 - 4], eax
 	dec r12d
@@ -423,7 +423,7 @@ GetSizeString:
 	imul ecx, 26 ; divide by 10 by multiplying by 26
 	movzx ecx, ch
 	add edx, ecx
-	lea ecx, [ecx + 4 * ecx]
+	lea ecx, [rcx + 4 * rcx]
 	shl ecx, 1
 	mov edi, 100
 	shl rdi, cl

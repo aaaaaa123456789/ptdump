@@ -43,7 +43,7 @@ DumpMappedMode:
 	mov [rax + inputdev.header_size], ebx
 	add rax, inputdev_size
 	inc ecx
-	lea edi, [ecx + ecx]
+	lea edi, [rcx + rcx]
 	cmp edi, [zInputCount]
 	jc .initial_setup_loop
 	shr dword[zInputCount], 1
@@ -106,7 +106,7 @@ DumpPartitionTables:
 	mov [r12 + inputdev.size], rax
 	mov [r12 + inputdev.block_size], ebx
 	mov edx, [r12 + inputdev.header_size]
-	lea r14d, [ebx + ebx]
+	lea r14d, [rbx + rbx]
 	cmp r14d, edx
 	cmovc r14d, edx
 	cmp r14, rax
@@ -355,7 +355,7 @@ DumpPartitionTables:
 	imul ecx, ebx
 	mov eax, ecx
 	repz cmpsq
-	lea edx, [ecx + 1]
+	lea edx, [rcx + 1]
 	cmovnz ecx, edx
 	sub eax, ecx
 	xor edx, edx
@@ -378,7 +378,7 @@ DumpPartitionTables:
 	imul ecx, ebx
 	mov eax, ecx
 	repz cmpsq
-	lea edx, [ecx + 1]
+	lea edx, [rcx + 1]
 	cmovnz ecx, edx
 	sub eax, ecx
 	xor edx, edx

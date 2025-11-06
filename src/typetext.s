@@ -49,10 +49,10 @@ GetGPTPartitionTypeString:
 	movdqa xmm3, xmm2
 	pxor xmm2, xmm7
 .loop:
-	lea ecx, [r8d + r11d]
+	lea ecx, [r8 + r11]
 	shr ecx, 1
 	and ecx, -2
-	lea esi, [8 * ecx + PartitionTypesGPT.GUIDs]
+	lea esi, [8 * rcx + PartitionTypesGPT.GUIDs]
 	call LoadGUID
 	pxor xmm0, xmm3
 	movdqa xmm1, xmm0
@@ -67,7 +67,7 @@ GetGPTPartitionTypeString:
 	jnc .greater
 	test ecx, ecx
 	jz .fail
-	lea r11d, [ecx - 2]
+	lea r11d, [rcx - 2]
 .continue:
 	cmp r8d, r11d
 	jbe .loop
@@ -81,7 +81,7 @@ GetGPTPartitionTypeString:
 	ret
 
 .greater:
-	lea r8d, [ecx + 2]
+	lea r8d, [rcx + 2]
 	jmp .continue
 
 .match:

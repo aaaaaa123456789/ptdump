@@ -16,7 +16,7 @@ JSONMode:
 	lea rdi, [rax + 1]
 	mov byte[zFallbackPartitionTypes], 0
 .file_loop:
-	lea edx, [r12d + 2 * r12d]
+	lea edx, [r12 + 2 * r12]
 	add edx, ebx
 	lea rdx, [rbp + 4 * rdx]
 	movzx eax, word[rdx + 4]
@@ -574,7 +574,7 @@ JSONMode:
 	cmp r12d, r14d
 	jc .file_loop
 	mov word[rdi - 1], `]\n`
-	lea ebx, [edi + 1]
+	lea ebx, [rdi + 1]
 	lea rbp, [r13 - JSON_OUTPUT_BUFFER_SIZE]
 	sub ebx, ebp
 	call WriteData

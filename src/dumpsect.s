@@ -258,7 +258,7 @@ DumpSectorsMode:
 	jnz .open_files_loop
 
 	mov esi, [zInputCount]
-	lea eax, [r14d + 3]
+	lea eax, [r14 + 3]
 	and eax, -4
 	add esi, eax
 	lea rsi, [rax + 4 * rsi]
@@ -519,7 +519,7 @@ DumpSectorsMode:
 	mov rbp, r13
 	mov ecx, [zInputCount]
 	lea rdi, [rbp + 4 * rdx]
-	lea eax, [ecx + 2 * ecx]
+	lea eax, [rcx + 2 * rcx]
 	add edx, eax
 	jc OutputTooLargeErrorExit
 	mov [rbp + 4 * rdx], ecx

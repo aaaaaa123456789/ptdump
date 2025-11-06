@@ -71,7 +71,7 @@ LoadAllPartitionTables:
 	and rax, r15
 	cmovz r15, rax
 .loop:
-	lea edi, [r14d - 1]
+	lea edi, [r14 - 1]
 	call LoadPartitionTablesForFile
 	dec r14d
 	mov rdi, [rsp]
@@ -156,7 +156,7 @@ ValidateGPTTableHeader:
 	sub eax, edx
 	mov esi, [r10 + 72]
 	sub esi, [rcx]
-	lea eax, [eax + esi]
+	lea eax, [rax + rsi]
 	jz .first_entry_at_start
 	mov edi, [zCurrentBlockSize]
 	shr edi, 2

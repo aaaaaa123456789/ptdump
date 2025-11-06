@@ -525,9 +525,9 @@ LoadPartitionTablesForFile:
 	movzx ecx, ah
 	assert extendedtable_size == 16
 	mov eax, [zCurrentBufferOffset]
-	lea ecx, [ecx + 2 * ecx]
+	lea ecx, [rcx + 2 * rcx]
 	add ecx, eax
-	lea esi, [eax + 4 * eax]
+	lea esi, [rax + 4 * rax]
 	shr ecx, 1
 	add esi, ecx
 	test r15, r15

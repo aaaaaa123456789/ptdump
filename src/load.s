@@ -55,7 +55,7 @@ OpenValidateInputDataFile:
 	movzx ecx, ax
 	test ecx, ecx
 	jz .invalid
-	lea eax, [ecx + 3]
+	lea eax, [rcx + 3]
 	shr eax, 2
 	add eax, edx
 	jc .invalid
@@ -135,7 +135,7 @@ OpenValidateInputDataFile:
 LoadEffectiveBlockList:
 	; in: OpenValidateDataFile's outputs, edi: index; in/out: r15: common buffer or null; out: rsi: table (block number, count, location), edi: count
 	; also sets [zCurrentBlockSize] to the logical file's block size
-	lea edi, [edi + 2 * edi]
+	lea edi, [rdi + 2 * rdi]
 	add edi, ebx
 LoadEffectiveBlockListForOffset:
 	; in: rbp: data file buffer, edi: offset, r15: common buffer or null; same outputs as above
@@ -157,7 +157,7 @@ LoadEffectiveBlockListForOffset:
 	add dh, dl
 	movzx eax, dh
 	movzx edx, dl
-	lea esi, [esi + eax + 2]
+	lea esi, [rsi + rax + 2]
 	add ecx, edx
 	cmp dword[rbp + 4 * rsi], 0
 	jnz .counting_loop
@@ -351,7 +351,7 @@ LoadEffectiveBlockListForOffset:
 
 FindBlockTableEntry:
 	; in: rsi: table, edi: count, rdx: block number; out: rdx: table entry or null; preserves rsi, rdi, r10, r11
-	lea r9d, [edi - 1]
+	lea r9d, [rdi - 1]
 	xor r8d, r8d
 	shl r9, 4
 .loop:

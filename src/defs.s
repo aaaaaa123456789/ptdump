@@ -170,7 +170,7 @@ endstruc
 %assign MREMAP_MAYMOVE      1
 %assign O_ACCMODE           3
 %assign O_RDONLY            0
-%assign O_SYNC         0x1000
+%assign O_DSYNC        0x1000
 %assign O_WRONLY            1
 %assign PROT_READ           1
 %assign PROT_WRITE          2

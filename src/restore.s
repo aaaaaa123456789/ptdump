@@ -132,7 +132,7 @@ Restore:
 	mov r13d, r14d
 .validation_loop:
 	mov rdi, [r12 + outputdev.filename]
-	mov esi, O_WRONLY | O_SYNC
+	mov esi, O_WRONLY | O_DSYNC
 	mov eax, open
 	syscall
 	cmp rax, -EINTR

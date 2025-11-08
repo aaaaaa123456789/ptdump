@@ -41,6 +41,20 @@ struc inputsect
 	                    resb 2 ; padding
 endstruc
 
+struc outputdev
+	.filename:          resb 8
+	.search_filename:
+	.size:
+	.block_table:       resb 8
+	.index:
+	.block_table_count: resb 4
+	.block_size:        resb 4
+	.file_descriptor:   resb 4
+	.type:              resb 1 ; (stat.st_mode & S_IFMT) >> 8, either S_IFREG >> 8 or S_IFBLK >> 8
+	.errors:            resb 1
+	                    resb 2 ; padding
+endstruc
+
 struc partitiondata
 	.type:                   resb  1 ; 0 = none; 0xff = invalid; others: see derived structs
 	                         resb  3 ; padding
@@ -130,6 +144,7 @@ endstruc
 %assign munmap      11 ; (addr, length)
 %assign ioctl       16 ; (fd, op, argp)
 %assign pread64     17 ; (fd, buf, count, offset)
+%assign pwrite64    18 ; (fd, buf, count, offset)
 %assign mremap      25 ; (old_address, old_size, new_size, flags, new_address)
 %assign dup2        33 ; (oldfd, newfd)
 %assign getpid      39 ; ()
@@ -155,6 +170,7 @@ endstruc
 %assign MREMAP_MAYMOVE      1
 %assign O_ACCMODE           3
 %assign O_RDONLY            0
+%assign O_SYNC         0x1000
 %assign O_WRONLY            1
 %assign PROT_READ           1
 %assign PROT_WRITE          2

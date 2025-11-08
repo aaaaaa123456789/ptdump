@@ -4,6 +4,7 @@ Messages:
 .bad_block_size:                  withend db "error: bad block size for "
 .bad_device_size:                 withend db "error: invalid size obtained for "
 .bad_input_type_error:            withend db "error: file is not a regular file or block device: "
+.block_size_mismatch:             withend db "error: device block size does not match data file: "
 .data_file_open_paren:            withend db "error: data file ("
 .data_file_not_valid:             withend db "error: data file is not valid: "
 .duplicate_filename_close_paren:  withend db ") contains a duplicate filename: "
@@ -31,7 +32,9 @@ Messages:
 .range_beyond_the_end_error:      withend db "error: sector range extends beyond the end of "
 .read_error:                      withend db `error: failed to read from input\n`
 .read_error_file:                 withend db "error: failed to read from "
+.restore_write_error:             withend db `error: failed to write data to the following files or devices:\n`
 .sizes_not_valid_error:           withend db `error: size options must not be specified for this mode\n`
+.small_device_error:              withend db "error: output file or device too small: "
 .stat_error:                      withend db "error: failed to stat file: "
 .unexpected_EOF:                  withend db `error: unexpected end of input\n`
 .unexpected_EOF_file:             withend db "error: unexpected end of file: "

@@ -150,7 +150,7 @@ CheckDuplicateFilename:
 	ret
 
 FindFilenameInTable:
-	; in: r13: filename table, r14d: filename table size, rsi: searched filename; out: eax: index
+	; in: r13: filename table, r14d: filename table size, rsi: searched filename; out: eax: index; preserves r10
 	mov r11, rsi
 	xchg rbp, rsi
 	mov rcx, rbx

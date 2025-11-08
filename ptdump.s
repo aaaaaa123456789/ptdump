@@ -20,6 +20,7 @@
 %include "src/main.s"
 %include "src/dump.s"
 %include "src/dumpsect.s"
+%include "src/restore.s"
 %include "src/list.s"
 %include "src/partlist.s"
 %include "src/json.s"

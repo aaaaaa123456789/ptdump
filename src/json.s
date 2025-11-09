@@ -364,17 +364,20 @@ JSONMode:
 	stosd
 	add rsi, 16
 	call LoadRenderGUID
-	add rdi, 36
+	mov byte[rdi + 36], '"'
+	add rdi, 37
 	; rsi/r9 is offset 16 bytes from here on!
 	mov r9, rsi
 	add rsi, 40
 	lodsw
 	test ax, ax
 	jz .done_GPT_partition_label
-	mov rdx, '","label'
+	mov rdx, ',"label"'
 	mov [rdi], rdx
-	mov dword[rdi + 7], 'l":"'
-	add rdi, 11
+	mov word[rdi + 8], ':"'
+	add rdi, 10
+	lea r8, [rdi - 1]
+	mov byte[zUnicodeSurrogatePair], 0
 	mov cl, 36
 .GPT_partition_label_loop:
 	cmp ax, 0x20
@@ -391,6 +394,8 @@ JSONMode:
 	stosb
 	jmp .next_GPT_partition_label_character
 .escaped_GPT_partition_label_character:
+	call CheckUnpairedUTF16Surrogate
+	jc .invalid_GPT_partition_label
 	mov word[rdi], "\u"
 	add rdi, 4
 	mov [zTempValue], ah
@@ -401,10 +406,34 @@ JSONMode:
 	add rdi, 4
 .next_GPT_partition_label_character:
 	dec cl
-	jz .done_GPT_partition_label
+	jz .finish_GPT_partition_label
 	lodsw
 	test ax, ax
 	jnz .GPT_partition_label_loop
+.finish_GPT_partition_label:
+	mov al, '"'
+	stosb
+	jmp .done_GPT_partition_label
+.invalid_GPT_partition_label:
+	mov rdi, r8
+	lea rsi, [r9 + 40]
+	mov byte[zTempByte], 36
+	mov al, "["
+	stosb
+.GPT_partition_label_array_loop:
+	lodsw
+	test ax, ax
+	jz .finish_GPT_partition_label_array
+	movzx eax, ax
+	push rsi
+	call .print_number
+	pop rsi
+	mov al, ","
+	stosb
+	dec byte[zTempByte]
+	jnz .GPT_partition_label_array_loop
+.finish_GPT_partition_label_array:
+	mov byte[rdi - 1], "]"
 .done_GPT_partition_label:
 	mov esi, JSONText.attributes
 	copybytes JSONText.attributes_end - JSONText.attributes

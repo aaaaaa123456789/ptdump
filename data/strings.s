@@ -42,7 +42,7 @@ Messages:
 .unknown_partition_table:         withend db "error: unknown partition table type for "
 
 JSONText:
-.attributes:          withend db '","attributes":'
+.attributes:          withend db ',"attributes":'
 .block_size:          withend db '","block_size":'
 .blocks_bracket:      withend db ',"blocks":['
 .entry_bootable:      db ',"entry":1' ; out of order because it continues in the next entry

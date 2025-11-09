@@ -11,7 +11,9 @@ zSizeSpecCount:            resb 4
 zCurrentFD:                resb 4
 zCurrentOutputOffset:
 zDefaultFileBlockSize:     resb 4
+zTempByte:
 zExecutionMode:
+zUnicodeSurrogatePair:
 zPartitionEntryIndex:
 zPartitionTableSizesMatch:
 zPartitionTableType:       resb 1

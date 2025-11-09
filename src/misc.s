@@ -145,3 +145,28 @@ PrintNumber:
 	sub rdi, rsi
 .done:
 	ret
+
+CheckUnpairedUTF16Surrogate:
+	; in: cl: remaining characters, ax: current codepoint, rsi: pointer to next codepoint; out: carry flag set: unpaired surrogate
+	; in/out: [zUnicodeSurrogatePair]: 1 if the next character is a low surrogate, 0 otherwise; clobbers only ch
+	mov ch, ah
+	sub ch, 0xd8
+	shr ch, 2
+	; ch = 0: high surrogate, 1: low surrogate, else: not a surrogate
+	cmp ch, 1
+	ja .done
+	jz .low
+	cmp cl, 2
+	jc .done
+	mov ch, [rsi + 1]
+	add ch, 0x20
+	cmp ch, 0xfc
+	setnc [zUnicodeSurrogatePair]
+.done:
+	ret
+
+.low:
+	xor ch, ch
+	xchg ch, [zUnicodeSurrogatePair]
+	cmp ch, 1
+	ret

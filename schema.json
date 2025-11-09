@@ -244,10 +244,17 @@
                 },
                 "label": {
                   "title": "Partition label",
-                  "description": "Label describing the partition, typically set by the operating system. This value will be unset if the label is empty.",
+                  "description": "Label describing the partition, typically set by the operating system. This value will be unset if the label is empty, or set to an array of codepoints if the label contains invalid UTF-16 characters (i.e., unpaired surrogates).",
+                  "$comment": "While unpaired surrogates are technically valid JSON, many tools fail to parse them. Since those are extremely rare to begin with, and typically the result of data corruption, strings with unpaired surrogates are not emitted for the sake of interoperability.",
                   "default": "",
-                  "type": "string",
-                  "maxLength": 36
+                  "type": ["string", "array"],
+                  "maxLength": 36,
+                  "maxItems": 36,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535
+                  }
                 },
                 "attributes": {
                   "title": "Partition attribute flags",

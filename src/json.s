@@ -164,7 +164,7 @@ JSONMode:
 	inc eax
 	mov [zCurrentBlockSize], eax
 	shl eax, 2
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.blocks_bracket
 	copybytes JSONText.blocks_bracket_end - JSONText.blocks_bracket
 
@@ -251,11 +251,11 @@ JSONMode:
 	copybytes JSONText.first_block_end - JSONText.first_block
 	mov rax, [rdx + 40]
 	mov r9, rdx
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.last_block
 	copybytes JSONText.last_block_end - JSONText.last_block
 	mov rax, [r9 + 48]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.partition_tables
 	copybytes JSONText.partition_tables_end - JSONText.partition_tables
 	xor r11d, r11d
@@ -265,13 +265,13 @@ JSONMode:
 	mov esi, JSONText.brace_header
 	copybytes JSONText.brace_header_end - JSONText.brace_header
 	mov rax, [r10 + 8 * r11 + partitiondataGPT.table_header_blocks]
-	call .print_number
+	call WriteNumberToBuffer
 	mov rax, ',"data":'
 	stosq
 	mov esi, [r10 + 4 * r11 + partitiondataGPT.table_header_locations]
 	lea r9, [rbp + 4 * rsi]
 	mov rax, [r9 + 72]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.blocks_bracket
 	copybytes JSONText.blocks_bracket_end - JSONText.blocks_bracket - 1
 	mov eax, [r9 + 80]
@@ -283,15 +283,15 @@ JSONMode:
 	div rcx
 	add edx, -1
 	adc rax, 0
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.entries
 	copybytes JSONText.entries_end - JSONText.entries
 	mov eax, [r9 + 80]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.entry_size
 	copybytes JSONText.entry_size_end - JSONText.entry_size
 	mov eax, [r9 + 84]
-	call .print_number
+	call WriteNumberToBuffer
 	mov cl, [zPartitionTableType]
 	shr byte[zPartitionTableType], 2
 	and cl, 3
@@ -328,19 +328,19 @@ JSONMode:
 	mov esi, JSONText.brace_number
 	copybytes JSONText.brace_number_end - JSONText.brace_number
 	mov eax, [r10 + partitionGPT.number]
-	call .print_number
+	call WriteNumberToBuffer
 	mov eax, [r10 + partitionGPT.location]
 	lea r9, [rbp + 4 * rax]
 	mov esi, JSONText.start
 	copybytes JSONText.start_end - JSONText.start
 	mov rax, [r9 + 32]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.length
 	copybytes JSONText.length_end - JSONText.length
 	mov rax, [r9 + 40]
 	sub rax, [r9 + 32]
 	inc rax
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.typeID_quote
 	copybytes JSONText.typeID_quote_end - JSONText.typeID_quote
 	mov rsi, r9
@@ -426,7 +426,7 @@ JSONMode:
 	jz .finish_GPT_partition_label_array
 	movzx eax, ax
 	push rsi
-	call .print_number
+	call WriteNumberToBuffer
 	pop rsi
 	mov al, ","
 	stosb
@@ -478,7 +478,7 @@ JSONMode:
 	mov rsi, [r10 + partitiondataMBR.block_table]
 	mov esi, [rsi + 12]
 	mov eax, [rbp + 4 * rsi + 0x1b8]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.extended_tables
 	copybytes JSONText.extended_tables_end - JSONText.extended_tables
 	movzx edx, byte[r10 + partitiondataMBR.partition_count_small]
@@ -499,14 +499,14 @@ JSONMode:
 	movzx eax, byte[rbx + extendedtable.block_high]
 	shl rax, 32
 	or rax, rdx
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.parent
 	copybytes JSONText.parent_end - JSONText.parent
 	mov edx, [rbx + extendedtable.parent]
 	movzx eax, byte[rbx + extendedtable.parent_high]
 	shl rax, 32
 	or rax, rdx
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.entry_one_brace
 	copybytes JSONText.entry_one_brace_end - JSONText.entry_one_brace
 	mov al, [rbx + extendedtable.parent_entry]
@@ -533,18 +533,18 @@ JSONMode:
 	mov esi, JSONText.brace_number
 	copybytes JSONText.brace_number_end - JSONText.brace_number
 	mov eax, [r10 + partitionMBR.number]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.start
 	copybytes JSONText.start_end - JSONText.start
 	mov edx, [r10 + partitionMBR.start]
 	movzx eax, byte[r10 + partitionMBR.start_high]
 	shl rax, 32
 	or rax, rdx
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.length
 	copybytes JSONText.length_end - JSONText.length
 	mov eax, [r10 + partitionMBR.length]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.typeID_quote
 	copybytes JSONText.typeID_quote_end - JSONText.typeID_quote - 1
 	mov al, [r10 + partitionMBR.type]
@@ -564,7 +564,7 @@ JSONMode:
 	movzx eax, byte[r10 + partitionMBR.table_high]
 	shl rax, 32
 	or rax, rdx
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.entry_bootable
 	copybytes JSONText.bootable_end - JSONText.entry_bootable
 	mov al, [r10 + partitionMBR.entry_flags]
@@ -628,16 +628,16 @@ JSONMode:
 	mov esi, JSONText.brace_number
 	copybytes JSONText.brace_number_end - JSONText.brace_number
 	mov rax, [zCurrentBlockNumber]
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.offset
 	copybytes JSONText.offset_end - JSONText.offset
 	mov eax, [zCurrentBlockLocation]
 	shl rax, 2
-	call .print_number
+	call WriteNumberToBuffer
 	mov esi, JSONText.count
 	copybytes JSONText.count_end - JSONText.count
 	mov eax, [zCurrentBlockCount]
-	call .print_number
+	call WriteNumberToBuffer
 	mov ax, "},"
 	stosw
 	ret
@@ -723,13 +723,6 @@ JSONMode:
 .single_digit:
 	add al, "0"
 	stosb
-	ret
-
-.print_number:
-	call NumberLength
-	mov r8d, ecx
-	call PrintNumber
-	add rdi, r8
 	ret
 
 .print_table_status:

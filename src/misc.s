@@ -146,6 +146,14 @@ PrintNumber:
 .done:
 	ret
 
+WriteNumberToBuffer:
+	; input: rax: number, rdi: buffer; advances rdi by the printed length; clobbers rcx, rdx, rsi, r8
+	call NumberLength
+	mov r8d, ecx
+	call PrintNumber
+	add rdi, r8
+	ret
+
 CheckUnpairedUTF16Surrogate:
 	; in: cl: remaining characters, ax: current codepoint, rsi: pointer to next codepoint; out: carry flag set: unpaired surrogate
 	; in/out: [zUnicodeSurrogatePair]: 1 if the next character is a low surrogate, 0 otherwise; clobbers only ch

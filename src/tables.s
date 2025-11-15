@@ -174,7 +174,7 @@ ValidateGPTTableHeader:
 	; is not worth the complexity here: by far and large, both block sizes and partition entry sizes are powers of two
 	; (the latter being currently a UEFI requirement), so this scenario cannot happen at all under normal circumstances
 	test edx, edx
-	jz .invalid
+	jnz .invalid
 	mov rdx, rcx
 	mov ecx, [r11 + partitiondataGPT.block_table_entries]
 	shl ecx, 4
@@ -206,7 +206,7 @@ ValidateGPTTableHeader:
 	mov eax, [rsp + 4]
 	cmp rcx, rax
 	cmovnc rcx, rax
-	mov eax, [zCurrentBlockSize]
+	mov eax, [r10 + 84]
 	sub [rsp + 4], ecx
 	imul rcx, rax
 	mov esi, [rdx + 12]

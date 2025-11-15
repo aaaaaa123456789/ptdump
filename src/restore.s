@@ -161,7 +161,7 @@ Restore:
 	mov eax, ioctl
 	syscall
 	cmp rax, -0x1000
-	jc .block_size_failed
+	jnc .block_size_failed
 	mov eax, [zGenericDataBuffer]
 	mov [r12 + outputdev.block_size], eax
 	mov edi, [r12 + outputdev.file_descriptor]
@@ -170,7 +170,7 @@ Restore:
 	mov eax, ioctl
 	syscall
 	cmp rax, -0x1000
-	jc .device_size_failed
+	jnc .device_size_failed
 	mov rax, [zGenericDataBuffer]
 .opened:
 	mov [r12 + outputdev.size], rax

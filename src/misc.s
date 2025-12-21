@@ -154,6 +154,29 @@ WriteNumberToBuffer:
 	add rdi, r8
 	ret
 
+RenderLowercaseHexWord:
+	; input: eax: number; output: rax: rendered value; clobbers only xmm0-xmm2
+	movd xmm0, eax
+	mov eax, 0x300f3a27
+	movd xmm2, eax
+	punpcklbw xmm2, xmm2
+	punpcklwd xmm2, xmm2
+	movdqa xmm1, xmm0
+	psrld xmm1, 4
+	punpcklbw xmm0, xmm1
+	pshufd xmm1, xmm2, 0xaa
+	pand xmm0, xmm1
+	pshufd xmm1, xmm2, 0xff
+	paddb xmm0, xmm1
+	pshufd xmm1, xmm2, 0x55
+	pcmpgtb xmm1, xmm0
+	pshufd xmm2, xmm2, 0
+	pandn xmm1, xmm2
+	paddb xmm0, xmm1
+	movq rax, xmm0
+	bswap rax
+	ret
+
 CheckUnpairedUTF16Surrogate:
 	; in: cl: remaining characters, ax: current codepoint, rsi: pointer to next codepoint; out: carry flag set: unpaired surrogate
 	; in/out: [zUnicodeSurrogatePair]: 1 if the next character is a low surrogate, 0 otherwise; clobbers only ch

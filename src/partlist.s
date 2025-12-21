@@ -368,49 +368,6 @@ PartitionsMode:
 	lea r12, [rdi + 16]
 	ret
 
-LoadPartitionTablesForFilenames:
-	; in: [zInputFilenames]: filenames, r12: filename count, plus OpenValidateDataFile's outputs; out: r15: partition tables
-	; overwrites [zInputFilenames] with (index, file table location) pairs
-	push r12
-	call LoadFilenameTable
-	mov r15, [zInputFilenames]
-.filename_loop:
-	mov rsi, [r15 + 8 * r12 - 8]
-	call FindFilenameInTable
-	mov [r15 + 8 * r12 - 8], eax
-	lea eax, [rax + 2 * rax]
-	add eax, ebx
-	mov [r15 + 8 * r12 - 4], eax
-	dec r12d
-	jnz .filename_loop
-	mov rdi, r13
-	lea rsi, [8 * r14 + 0x7f8]
-	add rsi, rsi
-	and rsi, -0x1000
-	mov eax, munmap
-	syscall
-	mov r12d, [rsp]
-	lea rsi, [8 * r12]
-	call Allocate
-	lea r13, [rax + 8 * r12]
-	xor edi, edi
-	mov [zCurrentBufferSize], edi
-	test r13w, 0xff8
-	cmovz r13, rdi
-	xchg r13, r15
-	push rax
-.load_loop:
-	mov edi, [r13 + 8 * r12 - 8]
-	call LoadPartitionTablesForFile
-	dec r12d
-	mov rax, [rsp]
-	mov rdi, [zCurrentPartitionTable]
-	mov [rax + 8 * r12], rdi
-	jnz .load_loop
-	pop r15
-	pop r12
-	jmp ReleaseCurrentBuffer
-
 GetSizeString:
 	; in: rdx:rax: size (rdx < 0x4000000); out: rax: string (5 characters, padded with spaces)
 	; this function will return nonsense for rdx:rax < 100 (e.g., "2.00B"), but it is never called for those values

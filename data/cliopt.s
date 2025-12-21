@@ -7,7 +7,7 @@ ExecutionModeFunctions:
 	dd ListBlocksMode
 	dd ListEffectiveBlocksMode
 	dd PartitionsMode
-	dd 0 ; ...
+	dd SFDiskMode
 	dd JSONMode
 	dd RestoreMode
 	dd CopyMode

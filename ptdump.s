@@ -23,6 +23,7 @@
 %include "src/restore.s"
 %include "src/list.s"
 %include "src/partlist.s"
+%include "src/sfdisk.s"
 %include "src/json.s"
 %include "src/load.s"
 %include "src/fileio.s"

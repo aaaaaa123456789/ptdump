@@ -75,6 +75,19 @@ JSONText:
 .table:               withend db ',"table":'
 .typeID_quote:        withend db ',"typeID":"'
 
+SFDiskText:
+.attrs:              withend db ', attrs="'
+.bootable:           withend db ", bootable"
+.colon_start_equals: withend db " : start="
+.first_lba:          withend db "first-lba: "
+.label_dos:          withend db `label: dos\nlabel-id: 0x`
+.label_gpt:          withend db `label: gpt\nlabel-id: `
+.last_lba:           withend db `\nlast-lba: `
+.legacy_bootable:    withend db "LegacyBIOSBootable "
+.no_block_IO:        withend db "NoBlockIOProtocol "
+.required_partition: withend db "RequiredPartition "
+.sector_size_header: withend db `\nunit: sectors\nsector-size: `
+
 MiscStrings:
 .dev_null: db "/dev/null", 0
 .stdin: withend db "<standard input>", 0
@@ -161,7 +174,8 @@ ProgramInformation:
 	db `:\n`
 	db `\tGenerate output like that of sfdisk -d for each disk in a data file.\n`
 	db `\tIf filename arguments are specified, only the selected disks'\n`
-	db `\tpartition tables will be shown.\n`
+	db `\tpartition tables will be shown. If multiple disks' partition tables are\n`
+	db `\tbeing output, they will be separated by two blank lines.\n`
 	db "-j, --"
 .json: withend db "json"
 	db `:\n`

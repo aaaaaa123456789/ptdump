@@ -183,6 +183,13 @@ ProgramInformation:
 	db `\tthe contents of a data file. (A JSON Schema file for this document is\n`
 	db `\tavailable in the project's repository.) Filename arguments are not\n`
 	db `\tallowed for this mode.\n`
+	db "-C, --"
+.check_gpt_checksums: withend db "check-gpt-checksums"
+	db `:\n`
+	db `\tVerify and show the CRC checksums for each GPT partition table in each\n`
+	db `\tdisk in the data file that contains GPT partition tables. If filename\n`
+	db `\targuments are specified, only the selected disks will be processed,\n`
+	db `\tprovided that they contain GPT partition tables.\n`
 	db "-r, --"
 .restore: withend db "restore"
 	db `:\n`

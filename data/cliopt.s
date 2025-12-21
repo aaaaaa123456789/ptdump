@@ -9,6 +9,7 @@ ExecutionModeFunctions:
 	dd PartitionsMode
 	dd SFDiskMode
 	dd JSONMode
+	dd 0 ; ...
 	dd RestoreMode
 	dd CopyMode
 	dd 0 ; ...
@@ -31,6 +32,7 @@ OptionTables:
 	dd ProgramInformation.partitions
 	dd ProgramInformation.sfdisk
 	dd ProgramInformation.json
+	dd ProgramInformation.check_gpt_checksums
 	dd ProgramInformation.restore
 	dd ProgramInformation.copy
 	dd ProgramInformation.merge
@@ -44,7 +46,7 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "mDn0lLpkjrcexTvhdbs"
+	db "mDn0lLpkjCrcexTvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
 	db ProgramInformation.map_end - ProgramInformation.map
@@ -56,6 +58,7 @@ OptionTables:
 	db ProgramInformation.partitions_end - ProgramInformation.partitions
 	db ProgramInformation.sfdisk_end - ProgramInformation.sfdisk
 	db ProgramInformation.json_end - ProgramInformation.json
+	db ProgramInformation.check_gpt_checksums_end - ProgramInformation.check_gpt_checksums
 	db ProgramInformation.restore_end - ProgramInformation.restore
 	db ProgramInformation.copy_end - ProgramInformation.copy
 	db ProgramInformation.merge_end - ProgramInformation.merge

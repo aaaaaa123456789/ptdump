@@ -62,8 +62,8 @@ ListBlocks:
 	jnz .specific_filenames
 	mov [zCurrentInputOffset], ebx
 	push rbp
-	mov ebp, TableHeaders
-	mov ebx, TableHeaders.end - TableHeaders
+	mov ebp, TableHeaders.block_headers
+	mov ebx, TableHeaders.block_headers_end - TableHeaders.block_headers
 	call WriteDataOrFail
 	pop rbp
 	pop r13
@@ -89,11 +89,11 @@ ListBlocks:
 	mov [zCurrentInputOffset], ebx
 	push rbp
 	cmp dword[zInputCount], 1
-	mov ebp, TableHeaders
-	mov eax, TableHeaders.one_file
+	mov ebp, TableHeaders.block_headers
+	mov eax, TableHeaders.block_headers_one_file
 	cmovz ebp, eax
-	mov ebx, TableHeaders.end - TableHeaders
-	mov eax, TableHeaders.one_file_end - TableHeaders.one_file
+	mov ebx, TableHeaders.block_headers_end - TableHeaders.block_headers
+	mov eax, TableHeaders.block_headers_one_file_end - TableHeaders.block_headers_one_file
 	cmovz ebx, eax
 	call WriteDataOrFail
 	pop rbp

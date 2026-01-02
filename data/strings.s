@@ -94,8 +94,11 @@ MiscStrings:
 .size_suffixes: db "BkMGTPEZY" ; the last few are only there to catch invalid sizes in tables
 .unknown_type: withend db "unknown type 0x"
 
-TableHeaders: withend db `           block#    count  bsize      offset filename\n`
-.one_file:    withend db `           block#    count  bsize      offset\n`
+TableHeaders:
+.block_headers:             withend db `           block#    count  bsize      offset filename\n`
+.block_headers_one_file:    withend db `           block#    count  bsize      offset\n`
+.checksum_headers:          withend db `           block#  type  checksum expected filename\n`
+.checksum_headers_one_file: withend db `           block#  type  checksum expected\n`
 
 Headers:
 .MBR_types: withend db `MBR partition types:\n`

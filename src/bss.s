@@ -19,6 +19,7 @@ zPartitionTableSizesMatch:
 zPartitionTableType:       resb 1
 zNoMoreOptions:
 zListingDelimiter:
+zSingleFileOutputMode:
 zFallbackPartitionTypes:
 zRemainingBufferBlocks:    resb 1
 zFilenameLength:

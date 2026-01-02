@@ -9,7 +9,7 @@ ExecutionModeFunctions:
 	dd PartitionsMode
 	dd SFDiskMode
 	dd JSONMode
-	dd 0 ; ...
+	dd GPTChecksumMode
 	dd RestoreMode
 	dd CopyMode
 	dd 0 ; ...

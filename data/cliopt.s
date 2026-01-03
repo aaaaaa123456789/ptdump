@@ -14,6 +14,7 @@ ExecutionModeFunctions:
 	dd CopyMode
 	dd 0 ; ...
 	dd 0 ; ...
+	dd 0 ; ...
 	dd ShowPartitionTypesMode
 	dd VersionMode
 	dd HelpMode
@@ -37,6 +38,7 @@ OptionTables:
 	dd ProgramInformation.copy
 	dd ProgramInformation.merge
 	dd ProgramInformation.extract
+	dd ProgramInformation.extract_rename
 	dd ProgramInformation.show_partition_types
 	dd ProgramInformation.version
 	dd ProgramInformation.help
@@ -46,7 +48,7 @@ OptionTables:
 	dd ProgramInformation.max_header_size
 	assert ($ - .long) / 4 == TOTAL_OPTION_FLAGS
 .short:
-	db "mDn0lLpkjCrcexTvhdbs"
+	db "mDn0lLpkjCrcexRTvhdbs"
 	assert ($ - .short) == TOTAL_OPTION_FLAGS
 .lengths:
 	db ProgramInformation.map_end - ProgramInformation.map
@@ -63,6 +65,7 @@ OptionTables:
 	db ProgramInformation.copy_end - ProgramInformation.copy
 	db ProgramInformation.merge_end - ProgramInformation.merge
 	db ProgramInformation.extract_end - ProgramInformation.extract
+	db ProgramInformation.extract_rename_end - ProgramInformation.extract_rename
 	db ProgramInformation.show_partition_types_end - ProgramInformation.show_partition_types
 	db ProgramInformation.version_end - ProgramInformation.version
 	db ProgramInformation.help_end - ProgramInformation.help

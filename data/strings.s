@@ -224,13 +224,21 @@ ProgramInformation:
 	db `\tdata file into a new one. The first filename argument for this mode is\n`
 	db `\tthe data file to extract from (use "-" to read from standard input);\n`
 	db `\tother filename arguments represent the filenames to extract.\n`
+	db "-R, --"
+.extract_rename: withend db "extract-rename"
+	db `:\n`
+	db `\tLike the previous mode, but renaming the disk images in the new data\n`
+	db `\tfile. After the first filename argument, subsequent arguments must come\n`
+	db `\tin pairs: the first filename of each pair indicates the disk image to\n`
+	db `\textract, and the second one indicates the name to give it in the\n`
+	db `\textracted data file.\n`
 	db "-T, --"
 .show_partition_types: withend db "show-partition-types"
 	db `: list all known partition types and IDs.\n`
 	db "-v, --"
 .version: withend db "version"
 	db `: show version information and exit.\n`
-	db "-h, --"
+	db "-h, -?, --"
 .help: withend db "help"
 	db `: show this help screen and exit.\n\n`
 	db `Other options:\n`

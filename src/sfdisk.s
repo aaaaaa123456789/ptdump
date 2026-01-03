@@ -61,7 +61,7 @@ SFDiskMode:
 	mov rbp, [zCurrentBuffer]
 	mov ebx, [zCurrentOutputOffset]
 	lea eax, [ebx + 2]
-	mov word[rbp + rbx], `\n\n`
+	mov word[rbx + rbp], `\n\n`
 	cmp r12d, 2
 	cmovnc ebx, eax
 	call WriteData

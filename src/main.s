@@ -207,7 +207,7 @@ Main:
 	mov rbp, r14
 	call StringLength
 	mov rbp, r14
-	mov byte[rbp + rbx], `\n`
+	mov byte[rbx + rbp], `\n`
 	inc rbx
 	jmp BadInvocationExit
 
@@ -225,7 +225,7 @@ Main:
 	mov rbp, [rsp]
 	call StringLength
 	pop rbp
-	mov byte[rbp + rbx], `\n`
+	mov byte[rbx + rbp], `\n`
 	inc rbx
 	jmp BadInvocationExit
 

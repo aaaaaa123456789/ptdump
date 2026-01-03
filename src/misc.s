@@ -57,7 +57,7 @@ FilenameErrorExit:
 	call WriteError
 	mov rbp, r15
 	call StringLength
-	mov byte[rbp + rbx], `\n` ; preserving the string is not needed since the program is exiting
+	mov byte[rbx + rbp], `\n` ; preserving the string is not needed since the program is exiting
 	inc rbx
 ErrorExit:
 	; in: rbp: error message; rbx: message size

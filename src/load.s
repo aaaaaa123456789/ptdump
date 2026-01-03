@@ -319,7 +319,7 @@ LoadEffectiveBlockListForOffset:
 .merge_loop:
 	add rsi, 16
 	mov eax, [r9 + 8]
-	lea rbx, [rbp + rax]
+	lea rbx, [rax + rbp]
 	mov rbp, [rsi]
 	cmp rbx, rbp
 	jnz .no_merge

@@ -308,7 +308,7 @@ DumpPartitionTables:
 	mov [r12 + inputdev.header_copy_sector_offset], bp
 	mov [zHeaderPartitionTableSize], bx
 	mov eax, [r12 + inputdev.header_size]
-	lea rdx, [rbp + rbx]
+	lea rdx, [rbx + rbp]
 	cmp rax, rdx
 	jnc .loaded_primary_GPT_table
 	sub rax, rbp

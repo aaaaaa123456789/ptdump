@@ -270,7 +270,7 @@ Restore:
 .already_printed_error_banner:
 	mov rbp, [r12 + outputdev.filename]
 	call StringLength
-	mov byte[rbp + rbx], `\n`
+	mov byte[rbx + rbp], `\n`
 	inc rbx
 	call WriteData ; [zCurrentFD] is already set to 2 by the WriteError call
 .check_error_next:

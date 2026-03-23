@@ -13,8 +13,8 @@ ExecutionModeFunctions:
 	dd RestoreMode
 	dd CopyMode
 	dd 0 ; ...
-	dd 0 ; ...
-	dd 0 ; ...
+	dd ExtractMode
+	dd ExtractRenameMode
 	dd ShowPartitionTypesMode
 	dd VersionMode
 	dd HelpMode

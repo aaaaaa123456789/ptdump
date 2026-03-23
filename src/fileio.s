@@ -49,8 +49,29 @@ MapInputFile:
 	syscall
 	ret
 
+ReadStandardInput:
+	xor edi, edi
+	mov esi, F_GETFL
+	mov eax, fcntl
+	syscall
+	cmp rax, -EBADF
+	jz .no_standard_input
+	mov ebp, Messages.read_error
+	mov ebx, Messages.read_error_end - Messages.read_error
+	cmp rax, -0x1000
+	jnc ErrorExit
+	and al, O_ACCMODE
+	cmp al, O_WRONLY
+.no_standard_input:
+	mov ebp, Messages.no_standard_input
+	mov ebx, Messages.no_standard_input_end - Messages.no_standard_input
+	jz ErrorExit
+	xor ebp, ebp
+	xor ebx, ebx
+	; fallthrough
+
 ReadInputFile:
-	; in: rbp: FD, rbx: known minimum size; out: rbp: buffer, rbx: true size; modifies r12, r13
+	; in: ebp: FD, rbx: known minimum size; out: rbp: buffer, rbx: true size; modifies r12, r13
 	lea rsi, [rbx + 0x1fff]
 	and rsi, -0x1000
 	mov r13, rsi
@@ -93,6 +114,44 @@ ReadInputFile:
 	mov eax, close
 	syscall
 	ret
+
+ReadFile:
+	; in: r15: filename; out: rbp: buffer, rbx: size; if [r15] = "-", use standard input
+	cmp byte[r15], "-"
+	jnz .file
+	cmp byte[r15 + 1], 0
+	jz ReadStandardInput
+.file:
+	mov rdi, r15
+	assert O_RDONLY == 0
+	xor esi, esi
+	mov eax, open
+	syscall
+	cmp rax, -EINTR
+	jz .file
+	cmp rax, -0x1000
+.open_failed:
+	mov ebp, Messages.open_error
+	mov ebx, Messages.open_error_end - Messages.open_error
+	jnc FilenameErrorExit
+	mov ebp, eax
+	mov edi, eax
+	mov esi, zStatBuffer
+	mov eax, fstat
+	syscall
+	cmp rax, -0x1000
+	jnc .open_failed
+	assert (S_IFMT & ~0xff00) == 0
+	mov al, [zStatBuffer + st_mode + 1]
+	and al, S_IFMT >> 8
+	cmp al, S_IFDIR >> 8
+	jz .open_failed
+	cmp al, S_IFLNK >> 8
+	jz .open_failed
+	xor ebx, ebx
+	cmp al, S_IFREG >> 8
+	cmovz rbx, [zStatBuffer + st_size]
+	jmp ReadInputFile
 
 ReadDataAtOffset:
 	; in: r10: offset; other inputs as for ReadData
@@ -306,3 +365,28 @@ OpenInputDevice:
 	mov ebp, Messages.bad_device_size
 	mov ebx, Messages.bad_device_size_end - Messages.bad_device_size
 	jmp FilenameErrorExit
+
+OpenOutput:
+	push r15
+	mov r15, [zDataFilename]
+	test r15, r15
+	jz .stdout
+.try:
+	mov rdi, r15
+	mov esi, 0o666
+	mov eax, creat
+	syscall
+	cmp rax, -EINTR
+	jz .try
+	mov [zCurrentFD], eax
+	cmp rax, -0x1000
+	jc .done
+	mov ebp, Messages.open_error
+	mov ebx, Messages.open_error_end - Messages.open_error
+	jmp FilenameErrorExit
+
+.stdout:
+	call CheckOpenStandardOutput ; exits with [zCurrentFD] = 1
+.done:
+	pop r15
+	ret

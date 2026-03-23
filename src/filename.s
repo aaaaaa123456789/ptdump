@@ -94,6 +94,7 @@ GetFilenameSortingKey:
 CheckDuplicateInputFilename:
 	mov edx, [zInputCount]
 	mov rbp, [zInputFilenames]
+CheckDuplicateFilenameInArray:
 	mov ebx, 8
 CheckDuplicateFilename:
 	; in: rbp: pointer to first filename entry, rdx: count, rbx: offset to next; preserves rbp, rdx (not rbx)

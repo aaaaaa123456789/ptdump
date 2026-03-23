@@ -733,7 +733,7 @@ WriteOutputExit:
 	jz .try_open
 	mov [zCurrentFD], eax
 	cmp rax, -0x1000
-	jc WriteStandardOutputExit.opened
+	jc WriteCurrentOutputExit
 	mov ebp, Messages.open_error
 	mov ebx, Messages.open_error_end - Messages.open_error
 	jmp FilenameErrorExit
@@ -743,7 +743,7 @@ WriteStandardOutputExit:
 	xor r15d, r15d
 .output:
 	call CheckOpenStandardOutput
-.opened:
+WriteCurrentOutputExit:
 	call WriteData
 	test rax, rax
 	jnz .output_error

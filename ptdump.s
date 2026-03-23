@@ -21,6 +21,7 @@
 %include "src/dump.s"
 %include "src/dumpsect.s"
 %include "src/restore.s"
+%include "src/extract.s"
 %include "src/list.s"
 %include "src/partlist.s"
 %include "src/sfdisk.s"

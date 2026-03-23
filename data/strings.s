@@ -5,6 +5,7 @@ Messages:
 .bad_device_size:                 withend db "error: invalid size obtained for "
 .bad_input_type_error:            withend db "error: file is not a regular file or block device: "
 .block_size_mismatch:             withend db "error: device block size does not match data file: "
+.data_file_and_inputs_needed:     withend db `error: input data file and input filenames must be specified for this mode\n`
 .data_file_open_paren:            withend db "error: data file ("
 .data_file_not_valid:             withend db "error: data file is not valid: "
 .duplicate_filename_close_paren:  withend db ") contains a duplicate filename: "

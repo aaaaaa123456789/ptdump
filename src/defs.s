@@ -176,7 +176,9 @@ endstruc
 %assign PROT_WRITE          2
 %assign S_IFBLK        0x6000
 %assign S_IFCHR        0x2000
+%assign S_IFDIR        0x4000
 %assign S_IFIFO        0x1000
+%assign S_IFLNK        0xa000
 %assign S_IFMT         0xf000
 %assign S_IFREG        0x8000
 %assign S_IFSOCK       0xc000

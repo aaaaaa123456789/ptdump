@@ -3,31 +3,13 @@ OpenValidateDataFile:
 	mov r15, [zDataFilename]
 	test r15, r15
 	jnz OpenValidateInputDataFile
-	xor edi, edi
-	mov esi, F_GETFL
-	mov eax, fcntl
-	syscall
-	cmp rax, -EBADF
-	jz .no_standard_input
-	mov ebp, Messages.read_error
-	mov ebx, Messages.read_error_end - Messages.read_error
-	cmp rax, -0x1000
-	jnc ErrorExit
-	and al, O_ACCMODE
-	cmp al, O_WRONLY
-.no_standard_input:
-	mov ebp, Messages.no_standard_input
-	mov ebx, Messages.no_standard_input_end - Messages.no_standard_input
-	jz ErrorExit
-	xor ebp, ebp
-	xor ebx, ebx
-	call ReadInputFile
-	jmp OpenValidateInputDataFile.read
+	call ReadStandardInput
+	jmp LoadValidateInputDataFile
 
 OpenValidateInputDataFile:
 	; in: r15: filename; out: rbp: data buffer; ebx: file table offset; r14d: file count
 	call MapInputFile
-.read:
+LoadValidateInputDataFile:
 	test rbx, rbx
 	jz .invalid
 	test bl, 3

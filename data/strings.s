@@ -215,9 +215,9 @@ ProgramInformation:
 	db "-e, --"
 .merge: withend db "merge"
 	db `:\n`
-	db `\tCompacts and merges multiple data files into a single one. (For this\n`
-	db `\tmode, the filename arguments are the input data files.) Use "-" as a\n`
-	db `\tfilename argument to read from standard input.\n`
+	db `\tMerges multiple data files into a single one. (For this mode, the\n`
+	db `\tfilename arguments are the input data files.) Use "-" as a filename\n`
+	db `\targument to read from standard input.\n`
 	db "-x, --"
 .extract: withend db "extract"
 	db `:\n`

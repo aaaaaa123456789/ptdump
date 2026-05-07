@@ -129,9 +129,9 @@ endstruc
 %assign JSON_OUTPUT_BUFFER_SIZE         0x50000 ; 320 KB - must be at least 0x3fffd bytes to handle evil filenames
 %assign MAXIMUM_BLOCK_SIZE              0x40000 ; 256 KB - cannot be higher without changing the file format
 %assign MAXIMUM_BUFFERED_OUTPUT          0x4000 ;  16 KB
-%assign MAXIMUM_PARTITION_TYPE_LENGTH        60 ; this value is assumed, not checked!
+%assign MAXIMUM_PARTITION_TYPE_LENGTH        70 ; this value is assumed, not checked!
 %assign MULTIPLE_LABEL_CODE                0xf0 ; the actual threshold for a multilabel is this value + 2
-%assign PARTITION_TYPE_LIST_MAX_SIZE     0x7000 ; this value is assumed, not checked!
+%assign PARTITION_TYPE_LIST_MAX_SIZE     0x8000 ; this value is assumed, not checked!
 %assign TOTAL_OPTION_FLAGS                   21
 
 ; Linux x64 syscall IDs (in: (rdi, rsi, rdx, r10, r8, r9); out: rax)

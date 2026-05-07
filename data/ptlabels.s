@@ -17,6 +17,7 @@ PartitionTypeLabels:
 .advanced_flasher_LG:   counted db "advanced flasher (LG)"
 .AIX:                   counted db "AIX"
 .AIX_bootable:          multilabel AIX, boot
+.alignment:             counted db "alignment"
 .alpha_parens:          counted db "(Alpha)"
 .alternate_sector:      counted db "alternate sector"
 .amigaOS:               counted db "AmigaOS"
@@ -24,9 +25,13 @@ PartitionTypeLabels:
 .amoeba_BBT:            multilabel amoeba, bad_blocks_parens
 .android:               counted db "Android"
 .android_adv_flasher:   multilabel android, advanced_flasher_LG
-.android_APDP:          multilabel android, APDP, qualcomm_parens
+.android_alignment_1:   multilabel android, alignment, one, qualcomm_parens
+.android_alignment_2:   multilabel android, alignment, two, qualcomm_parens
+.android_APDP_A:        multilabel android, APDP, slotA_parens, qualcomm_parens
+.android_APDP_B:        multilabel android, APDP, slotB_parens, qualcomm_parens
 .android_boot_1:        multilabel android, boot, one
-.android_boot_2:        multilabel android, boot, two
+.android_boot_2A:       multilabel android, boot, two, slotA_parens
+.android_boot_2B:       multilabel android, boot, two, slotB_parens
 .android_boot_loader_1: multilabel android, boot, loader, one
 .android_boot_loader_2: multilabel android, boot, loader, two
 .android_cache:         multilabel android, cache
@@ -36,7 +41,8 @@ PartitionTypeLabels:
 .android_data:          multilabel android, data
 .android_data_external: multilabel android, data, external_parens
 .android_data_qualcomm: multilabel android, data, qualcomm_parens
-.android_DDR:           multilabel android, DDR
+.android_DDR_A:         multilabel android, DDR, slotA_parens
+.android_DDR_B:         multilabel android, DDR, slotB_parens
 .android_DPO:           multilabel android, DPO
 .android_EKSST:         multilabel android, EKSST
 .android_encrypt_qcomm: multilabel android, encrypted, qualcomm_parens
@@ -66,24 +72,32 @@ PartitionTypeLabels:
 .android_PG1:           multilabel android, PG, one
 .android_PG2:           multilabel android, PG, two
 .android_power_config:  multilabel android, power_management, configuration
-.android_QHEE:          multilabel android, QHEE, qualcomm_parens
-.android_QSEE:          multilabel android, QSEE, qualcomm_parens
+.android_QHEE_A:        multilabel android, QHEE, slotA_parens, qualcomm_parens
+.android_QHEE_B:        multilabel android, QHEE, slotB_parens, qualcomm_parens
+.android_QHEE_B_old:    multilabel android, QHEE, slotB_parens, old_parens, qualcomm_parens
+.android_QSEE_A:        multilabel android, QSEE, slotA_parens, qualcomm_parens
+.android_QSEE_B:        multilabel android, QSEE, slotB_parens, qualcomm_parens
 .android_RAM_dump:      multilabel android, RAM_dump
 .android_RCT:           multilabel android, RCT, qualcomm_parens
 .android_recovery_1:    multilabel android, recovery, one
 .android_recovery_2:    multilabel android, recovery, two
 .android_resources:     multilabel android, resources, qualcomm_parens
 .android_RPM:           multilabel android, resources, slash, power_management
-.android_SBL_1:         multilabel android, secondary, boot, loader, one, qualcomm_parens
+.android_SBL_1A:        multilabel android, secondary, boot, loader, one, slotA_parens, qualcomm_parens
+.android_SBL_1B:        multilabel android, secondary, boot, loader, one, slotB_parens, qualcomm_parens
 .android_SBL_2:         multilabel android, secondary, boot, loader, two, qualcomm_parens
 .android_SBL_3:         multilabel android, secondary, boot, loader, three, qualcomm_parens
-.android_SBL_app:       multilabel android, secondary, boot, loader, hyphen, vendor, qualcomm_parens
+.android_SBL_A_app:     multilabel android, secondary, boot, loader, hyphen, vendor, slotA_parens, qualcomm_parens
+.android_SBL_B_app:     multilabel android, secondary, boot, loader, hyphen, vendor, slotB_parens, qualcomm_parens
+.android_SBL_config_A:  multilabel android, secondary, boot, loader, configuration, slotA_parens, qualcomm_parens
+.android_SBL_config_B:  multilabel android, secondary, boot, loader, configuration, slotB_parens, qualcomm_parens
 .android_SEC:           multilabel android, SEC
 .android_spare_1:       multilabel android, spare, one, qualcomm_parens
 .android_spare_2:       multilabel android, spare, two, qualcomm_parens
 .android_spare_3:       multilabel android, spare, three, qualcomm_parens
 .android_spare_4:       multilabel android, spare, four, qualcomm_parens
 .android_SSD:           multilabel android, secure_sw_download
+.android_super:         multilabel android, super, qualcomm_parens
 .android_system_1:      multilabel android, system, one
 .android_system_2:      multilabel android, system, two
 .android_vendor:        multilabel android, vendor
@@ -558,6 +572,12 @@ PartitionTypeLabels:
 .offline_parens:        counted db "(offline)"
 .old_parens:            counted db "(old)"
 .one:                   counted db "1"
+.oneplus:               counted db "OnePlus"
+.oneplus_reserved_1:    multilabel oneplus, reserved, one
+.oneplus_reserved_2:    multilabel oneplus, reserved, two
+.oneplus_reserved_3:    multilabel oneplus, reserved, three
+.oneplus_reserved_4:    multilabel oneplus, reserved, four
+.oneplus_reserved_5:    multilabel oneplus, reserved, five
 .ONIE:                  counted db "ONIE"
 .ONIE_boot:             multilabel ONIE, boot
 .ONIE_configuration:    multilabel ONIE, configuration
@@ -683,6 +703,7 @@ PartitionTypeLabels:
 .status:                counted db "status"
 .storage_lowercase:     counted db "storage"
 .storage_uppercase:     counted db "Storage"
+.super:                 counted db "super"
 .swap:                  counted db "swap"
 .syrinx:                counted db "Syrinx"
 .system:                counted db "system"

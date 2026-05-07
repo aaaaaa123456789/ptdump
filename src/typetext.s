@@ -76,7 +76,7 @@ GetGPTPartitionTypeString:
 	jz .done
 	movdqa xmm0, xmm7
 	call RenderGUID
-	add rdi, 37
+	add rdi, 36
 .done:
 	ret
 

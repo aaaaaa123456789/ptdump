@@ -3,7 +3,7 @@
 ; around the Internet. In the end, all lists take information from other lists, and everyone is playing fast and loose
 ; with attribution because this is just a directory of IDs, and the IDs themselves are probably not copyrightable (but
 ; if you need confirmation on this matter, ask a lawyer in your jurisdiction, not a code comment!).
-; Last updated: 2026-05-07
+; Last updated: 2026-05-10
 
 %define PL(&label) (PartitionTypeLabels.%tok(label) - PartitionTypeLabels)
 
@@ -21,6 +21,7 @@ PartitionTypesGPT:
 	gpttype 01b41e1b-002a-453c-9f17-88793989ff8f, ceph_mpath_block_WAL
 	gpttype 024dee41-33e7-11d3-9d69-0008c781f39f, MBR_partition_table
 	gpttype 0311fc50-01ca-4725-ad77-9adbb20ace98, acronis_FAT32
+	gpttype 0382f197-e41f-4e84-b18b-0b564aead875, android_boot_RAM_A
 	gpttype 0394ef8b-237e-11e1-b4b3-e89a8f7fc3a7, midnightBSD_UFS
 	gpttype 05816ce2-dd40-4ac6-a61d-37d32dc1ba7d, linux_vsusr_MIPS64
 	gpttype 05e044df-92f1-4325-b69e-374a82e97d6e, android_SBL_3
@@ -41,6 +42,7 @@ PartitionTypesGPT:
 	gpttype 11406f35-1173-4869-807b-27df71802812, android_DPO
 	gpttype 114eaffe-1552-4022-b26e-9b053604cf84, android_boot_loader_2
 	gpttype 143a70ba-cbd3-4f06-919f-6c05683a78bc, linux_vsroot_ARC
+	gpttype 14d11c40-2a3d-4f97-882d-103a1ec09333, android_QSEE_apps
 	gpttype 15bb03af-77e7-4d4a-b12b-c0d084f7491c, linux_usr_ppc64LE
 	gpttype 15de6170-65d3-431c-916e-b0dcd8393f25, linux_vsroot_PA_RISC
 	gpttype 166418da-c469-4022-adf4-b30afd37f176, ceph_LUKS_block_DB
@@ -58,6 +60,7 @@ PartitionTypesGPT:
 	gpttype 20a0c19c-286a-42fa-9ce7-f64c3226a794, android_DDR_A
 	gpttype 20ac26be-20b7-11e3-84c5-6cfdb94711e9, android_metadata
 	gpttype 21686148-6449-6e6f-744e-656564454649, BIOS_boot
+	gpttype 225af6e5-c009-4b6f-a240-625d1510d1ff, QWES_license_store_B
 	gpttype 23cc04df-c278-4ce7-8471-897d1a4bcdf7, fuchsia_bootB_legacy
 	gpttype 24b2d975-0f97-4521-afa1-cd531e421b8d, linux_vroot_ARC
 	gpttype 2568845d-2332-4675-bc39-8fa5a4748d15, android_boot_loader_1
@@ -89,12 +92,14 @@ PartitionTypesGPT:
 	gpttype 3a112a75-8729-4380-b4cf-764d79934448, linux_vsroot_RISCV_32
 	gpttype 3b8f8425-20e0-4f3b-907f-1a25a76f98e8, linux_srv
 	gpttype 3c3d61fe-b5f3-414d-bb71-8739a694a4ef, linux_vusr_MIPS64LE
+	gpttype 3c44f88b-1878-4c29-b122-ee78766442a7, android_firmware_ver
 	gpttype 3c94aa5b-f387-417b-8ac8-f45f20024666, oneplus_reserved_3
 	gpttype 3cb8e202-3b7e-47dd-8a3c-7ff2a13cfcec, chromeOS_root
 	gpttype 3d3e3ad2-8ff3-4975-a7e7-0e8a10b69f0d, android_QHEE_B
 	gpttype 3d48ce54-1d16-11dc-8696-01301bb8a9f5, dragonfly_label64
 	gpttype 3de21764-95bd-54bd-a5c3-4abe786f38a8, uboot_boot_loader
 	gpttype 3e23ca0b-a4bc-4b4e-8087-5ab6a26aa8a9, linux_vsusr_MIPSLE
+	gpttype 3e3e3ecd-c512-4f95-9144-6063826a8970, android_fwimg_B_OEM
 	gpttype 3f0f8318-f146-4e6b-8222-c28c8f02e0d5, chromeOS_hibernation
 	gpttype 3f324816-667b-46ae-86ee-9b0c0c6c11b4, linux_vsusr_s390_64
 	gpttype 3f82eebc-87c9-4097-8165-89d6540557c0, amigaOS
@@ -147,6 +152,7 @@ PartitionTypesGPT:
 	gpttype 52637672-7900-11aa-aa11-00306543ecac, darwin_APFS_recovery
 	gpttype 5265636f-7665-11aa-aa11-00306543ecac, apple_TV_recovery
 	gpttype 53746f72-6167-11aa-aa11-00306543ecac, darwin_core_storage
+	gpttype 538cbdba-d4a4-4438-a466-d7b356fac165, android_EFI_secapp_B
 	gpttype 55465300-0000-11aa-aa11-00306543ecac, darwin_UFS
 	gpttype 55497029-c7c1-44cc-aa39-815ed1558630, linux_usr_tile_gx
 	gpttype 558d43c5-a1ac-43c0-aac8-d1472b2923d1, ms_storage_replica
@@ -222,6 +228,7 @@ PartitionTypesGPT:
 	gpttype 7a3df1a3-a31a-454d-bd78-df259ed486be, android_SBL_1B
 	gpttype 7a430799-f711-4c7e-8e5b-1d685bd48607, linux_vroot_MIPS
 	gpttype 7ac63b47-b25c-463b-8df8-b4a94e6c90e1, linux_vroot_s390_32
+	gpttype 7bab3c93-5f73-4d02-b8cb-5b9f899d29a8, QWES_license_store_A
 	gpttype 7c29d3ad-78b9-452e-9deb-d098d542f092, android_spare_2
 	gpttype 7c3457ef-0000-11aa-aa11-00306543ecac, darwin_APFS
 	gpttype 7c5222bd-8f5d-4087-9c00-bf9843c7b58c, spdk_old
@@ -234,6 +241,7 @@ PartitionTypesGPT:
 	gpttype 824cc7a0-36a8-11e3-890a-952519ad3f61, openBSD_data
 	gpttype 82acc91f-357c-4a68-9c8f-689e1b1a23a1, android_misc_1
 	gpttype 83bd6b9d-7f41-11dc-be0b-001560b84f0f, freeBSD_boot
+	gpttype 846c6f05-eb46-4c0a-a1a3-3648ef3f9d0e, android_fwimg_A
 	gpttype 8484680c-9521-48c6-9c11-b0720656f69e, linux_usr_x86_64
 	gpttype 85d5e45a-237c-11e1-b4b3-e89a8f7fc3a7, midnightBSD_data
 	gpttype 85d5e45b-237c-11e1-b4b3-e89a8f7fc3a7, midnightBSD_swap
@@ -315,6 +323,7 @@ PartitionTypesGPT:
 	gpttype bd215ab2-1d16-11dc-8696-01301bb8a9f5, dragonfly_legacy
 	gpttype bd59408b-4514-490d-bf12-9878d963f378, android_configuration
 	gpttype bdb528a5-a259-475f-a87d-da53fa736a07, linux_vusr_powerPC_64
+	gpttype be8a7e08-1b7a-4cae-993a-d5b7fb55b3c2, android_EFI_secapp_A
 	gpttype be9067b9-ea49-4f15-b4f6-f36f8c9e1818, coreOS_root_RAID
 	gpttype beaec34b-8442-439b-a40b-984381ed097d, linux_usr_RISCV_64
 	gpttype bfbfafe7-a34f-448a-9a5b-6213eb736c22, lenovo_boot
@@ -325,6 +334,7 @@ PartitionTypesGPT:
 	gpttype c23ce4ff-44bd-4b00-b2d4-b41b3419e02a, linux_vsusr_ARM64
 	gpttype c31c45e6-3f39-412e-80fb-4809c4980599, linux_root_ppc64LE
 	gpttype c3836a13-3137-45ba-b583-b16c50fe5eb4, linux_vsusr_RISCV_32
+	gpttype c3e58b09-abcb-42ea-9f0c-3fa453fa892e, android_boot_RAM_B
 	gpttype c50cdd70-3862-4cc3-90e1-809a8c93ee2c, linux_root_tile_gx
 	gpttype c5a0aeec-13ea-11e5-a1b1-001e67ca0c3c, android_vendor
 	gpttype c80187a5-73a3-491a-901a-017c3fa953e9, linux_vsroot_s390_64
@@ -351,6 +361,7 @@ PartitionTypesGPT:
 	gpttype d212a430-fbc5-49f9-a983-a7feef2b8d0e, linux_vroot_PA_RISC
 	gpttype d27f46ed-2919-4cb8-bd25-9531f3c16534, linux_root_ARC
 	gpttype d2f9000a-7a18-453f-b5cd-4d32f77a7b32, linux_vsusr_RISCV_64
+	gpttype d30c8b21-ddd9-45b6-8de0-3165d34395c9, android_fwimg_B
 	gpttype d3bfe2de-3daf-11df-ba40-e3a556d89593, intel_fast_flash
 	gpttype d46495b7-a053-414f-80f7-700c99921ef8, linux_vsroot_alpha
 	gpttype d4a236e7-e873-4c07-bf1d-bf6cf7f1c3c6, linux_vsroot_ppc64LE
@@ -372,6 +383,7 @@ PartitionTypesGPT:
 	gpttype df24e5ed-8c96-4b86-b00b-79667dc6de11, android_spare_1
 	gpttype df3300ce-d69f-4c92-978c-9bfb0f38d820, linux_vroot_ARM64
 	gpttype df765d00-270e-49e5-bc75-f47bb2118b09, linux_vusr_powerPC
+	gpttype e126a436-757e-42d0-8d19-0f362f7a62b8, android_fwimg_A_OEM
 	gpttype e18cf08c-33ec-4c0d-8246-c6c6fb3da024, linux_usr_alpha
 	gpttype e1a6a689-0c8d-4cc6-b4e8-55a4320fbd8a, android_QHEE_A
 	gpttype e2802d54-0545-e8a1-a1e8-c7a3e245acd4, android_misc_2
@@ -400,6 +412,7 @@ PartitionTypesGPT:
 	gpttype f462e0ea-a20e-4b10-867a-2d4455366548, android_SBL_config_B
 	gpttype f46b2c26-59ae-48f0-9106-c50ed47f673d, linux_vusr_loongarch
 	gpttype f5e2c20c-45b2-4ffa-bce9-2a60737e1aaf, linux_vsroot_ppc64
+	gpttype f7eecb66-781a-439a-8955-70e12ed4a7a0, android_boot_ldr_log
 	gpttype f95d940e-caba-4578-9b93-bb6c90f29d3e, fuchsia_fact_config
 	gpttype fa709c7e-65b1-4593-bfd5-e71d61de9b02, softraid_data
 	gpttype fb3aabf9-d25f-47cc-bf5e-721d1816496b, ceph_key_store
@@ -409,6 +422,7 @@ PartitionTypesGPT:
 	gpttype fe3a2a5d-4f32-41a7-b725-accc3285a309, chromeOS_kernel
 	gpttype fe8a2634-5e2e-46ba-99e3-3a192091a350, fuchsia_bootloader
 	gpttype ff3c6142-3c54-4c27-a2a7-7631a58e1320, QNX_trusted_safefs
+	gpttype ff608bf6-aedf-4084-bec5-c92ab4e4534d, android_boot_RAM_oldB
 
 	align 2, db 0
 .labels:

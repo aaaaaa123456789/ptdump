@@ -32,8 +32,12 @@ PartitionTypeLabels:
 .android_boot_1:        multilabel android, boot, one
 .android_boot_2A:       multilabel android, boot, two, slotA_parens
 .android_boot_2B:       multilabel android, boot, two, slotB_parens
+.android_boot_ldr_log:  multilabel android, boot, loader, log, qualcomm_parens
 .android_boot_loader_1: multilabel android, boot, loader, one
 .android_boot_loader_2: multilabel android, boot, loader, two
+.android_boot_RAM_A:    multilabel android, boot, loader, RAM_dump, slotA_parens, qualcomm_parens
+.android_boot_RAM_B:    multilabel android, boot, loader, RAM_dump, slotB_parens, qualcomm_parens
+.android_boot_RAM_oldB: multilabel android, boot, loader, RAM_dump, slotB_parens, old_parens, qualcomm_parens
 .android_cache:         multilabel android, cache
 .android_cache_qcomm:   multilabel android, cache, qualcomm_parens
 .android_config_qcomm:  multilabel android, configuration, data, qualcomm_parens
@@ -44,6 +48,8 @@ PartitionTypeLabels:
 .android_DDR_A:         multilabel android, DDR, slotA_parens
 .android_DDR_B:         multilabel android, DDR, slotB_parens
 .android_DPO:           multilabel android, DPO
+.android_EFI_secapp_A:  multilabel android, EFI, secure, applications, slotA_parens, qualcomm_parens
+.android_EFI_secapp_B:  multilabel android, EFI, secure, applications, slotB_parens, qualcomm_parens
 .android_EKSST:         multilabel android, EKSST
 .android_encrypt_qcomm: multilabel android, encrypted, qualcomm_parens
 .android_factory_1:     multilabel android, factory, one
@@ -53,6 +59,11 @@ PartitionTypeLabels:
 .android_FSG_1:         multilabel android, fsg, one
 .android_FSG_2:         multilabel android, fsg, two
 .android_firmware_OTA:  multilabel android, firmware, OTA
+.android_firmware_ver:  multilabel android, firmware, version, qualcomm_parens
+.android_fwimg_A:       multilabel android, firmware, multi_images, slotA_parens, qualcomm_parens
+.android_fwimg_B:       multilabel android, firmware, multi_images, slotB_parens, qualcomm_parens
+.android_fwimg_A_OEM:   multilabel android, firmware, multi_images, hyphen, OEM, slotA_parens, qualcomm_parens
+.android_fwimg_B_OEM:   multilabel android, firmware, multi_images, hyphen, OEM, slotB_parens, qualcomm_parens
 .android_hw_info:       multilabel android, hardware_info
 .android_hw_info_qcomm: multilabel android, hardware_info, qualcomm_parens
 .android_key_store:     multilabel android, key_store
@@ -76,6 +87,7 @@ PartitionTypeLabels:
 .android_QHEE_B:        multilabel android, QHEE, slotB_parens, qualcomm_parens
 .android_QHEE_B_old:    multilabel android, QHEE, slotB_parens, old_parens, qualcomm_parens
 .android_QSEE_A:        multilabel android, QSEE, slotA_parens, qualcomm_parens
+.android_QSEE_apps:     multilabel android, QSEE, applications
 .android_QSEE_B:        multilabel android, QSEE, slotB_parens, qualcomm_parens
 .android_RAM_dump:      multilabel android, RAM_dump
 .android_RCT:           multilabel android, RCT, qualcomm_parens
@@ -96,7 +108,7 @@ PartitionTypeLabels:
 .android_spare_2:       multilabel android, spare, two, qualcomm_parens
 .android_spare_3:       multilabel android, spare, three, qualcomm_parens
 .android_spare_4:       multilabel android, spare, four, qualcomm_parens
-.android_SSD:           multilabel android, secure_sw_download
+.android_SSD:           multilabel android, secure, software_download
 .android_super:         multilabel android, super, qualcomm_parens
 .android_system_1:      multilabel android, system, one
 .android_system_2:      multilabel android, system, two
@@ -107,6 +119,7 @@ PartitionTypeLabels:
 .apple_darwin:          counted db "Apple Darwin"
 .apple_TV:              counted db "Apple TV"
 .apple_TV_recovery:     multilabel apple_TV, recovery
+.applications:          counted db "applications"
 .ARC_parens:            counted db "(ARC)"
 .ARM_EBBR:              counted db "ARM EBBR"
 .ARM_EBBR_firmware:     multilabel ARM_EBBR, firmware
@@ -509,6 +522,7 @@ PartitionTypeLabels:
 .linux_vusr_x86_64:     multilabel linux, usr, verity, x86_parens, bits64_parens
 .linux_xbootldr:        multilabel linux, extended, boot, loader
 .loader:                counted db "loader"
+.log:                   counted db "log"
 .loongarch_parens:      counted db "(LoongArch)"
 .LUKS_parens:           counted db "(LUKS)"
 .marvell_armada:        counted db "Marvell Armada"
@@ -541,6 +555,7 @@ PartitionTypeLabels:
 .ms_storage_replica:    multilabel microsoft, storage_uppercase, replica
 .ms_storage_spaces:     multilabel microsoft, storage_uppercase, spaces
 .MSADP:                 counted db "MSADP"
+.multi_images:          counted db "multi images"
 .multipath:             counted db "multipath"
 .nandfs:                counted db "nandfs"
 .NEC_FAT:               multilabel FAT12, slash, FAT16, NEC_parens
@@ -635,6 +650,9 @@ PartitionTypeLabels:
 .QNX_trusted_safefs:    multilabel QNX_trusted, safefs
 .QSEE:                  counted db "QSEE"
 .qualcomm_parens:       counted db "(Qualcomm)"
+.QWES_license_store:    counted db "Qualcomm Wireless Edge Service license store"
+.QWES_license_store_A:  multilabel QWES_license_store, slotA_parens
+.QWES_license_store_B:  multilabel QWES_license_store, slotB_parens
 .RAID:                  counted db "RAID"
 .RAM_dump:              counted db "RAM dump"
 .raw:                   counted db "raw"
@@ -655,7 +673,7 @@ PartitionTypeLabels:
 .secondary:             counted db "secondary"
 .secondary_parens:      counted db "(secondary)"
 .SEC:                   counted db "SEC"
-.secure_sw_download:    counted db "secure software download"
+.secure:                counted db "secure"
 .secured_parens:        counted db "(secured)"
 .service:               counted db "service"
 .sfs:                   counted db "Secure File System (SFS)"
@@ -670,6 +688,7 @@ PartitionTypeLabels:
 .softraid_data:         multilabel softraid, data
 .softraid_scratch:      multilabel softraid, scratch
 .softraid_status:       multilabel softraid, status
+.software_download:     counted db "software download"
 .solaris:               counted db "Solaris"
 .solaris_alt_sector:    multilabel solaris, alternate_sector
 .solaris_backup:        multilabel solaris, backup
@@ -728,6 +747,7 @@ PartitionTypeLabels:
 .veracrypt:             counted db "VeraCrypt"
 .verified:              counted db "verified"
 .verity:                counted db "verity"
+.version:               counted db "version"
 .vinum:                 counted db "Vinum"
 .virtual:               counted db "virtual"
 .vmware_ESX:            counted db "VMware ESX"
